@@ -95,9 +95,6 @@
     <FxCompile Include="SnowShaders.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-    <FxCompile Include="initTexCS.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h">
@@ -150,5 +147,6 @@
     <Text Include="Inline.hlsl">
       <Filter>Shaders</Filter>
     </Text>
+    <Text Include="initTexCS.hlsl" />
   </ItemGroup>
 </Project>

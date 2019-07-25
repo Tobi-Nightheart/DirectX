@@ -131,6 +131,7 @@
     <ClInclude Include="Common\GameTimer.h" />
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="pcH.h" />
+    <ClInclude Include="UploadBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Common\d3dApp.cpp" />

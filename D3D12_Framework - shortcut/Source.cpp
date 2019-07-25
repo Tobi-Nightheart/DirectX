@@ -13,6 +13,11 @@ public:
 	virtual bool Initialize() override;
 
 private:
+	float mRadius, mTheta, mPhi;
+	XMFLOAT2 mLastMousePos;
+	XMFLOAT4X4 mView, mWorld, mProj;
+
+	virtual void OnMouseMove(WPARAM btnState, int x, int y) override;
 	virtual void OnResize() override;
 	virtual void Update(const GameTimer& gt) override;
 	virtual void Draw(const GameTimer& gt) override;
@@ -57,9 +62,58 @@ void Source::OnResize()
 	D3DApp::OnResize();
 }
 
+void Source::OnMouseMove(WPARAM btnState, int x, int y) 
+{
+	if ((btnState & MK_LBUTTON) != 0)
+	{
+		//Make each pixel correspond to a quarter of a degree
+		float dx = XMConvertToRadians(0.25f * static_cast<float>(x - mLastMousePos.x));
+		float dy = XMConvertToRadians(0.25f * static_cast<float>(x - mLastMousePos.y));
+
+		//Update angles based on input to orbit camera
+		mTheta += dx;
+		mPhi += dy;
+
+		//Rstrict the angle mPhi
+		mPhi = MathHelper::Clamp(mPhi, 0.1f, MathHelper::Pi - 0.1f);
+	}
+	else if((btnState & MK_RBUTTON) != 0)
+	{
+		//Make each pixel correspond to 0.005 unit in the scene
+		float dx = 0.005f * static_cast<float>(x - mLastMousePos.x);
+		float dy = 0.005f * static_cast<float>(y - mLastMousePos.y);
+
+		//Update the camera radius based on input
+		mRadius += dx - dy;
+
+		//Restrict the radius
+		mRadius = MathHelper::Clamp(mRadius, 3.0f, 15.0f);
+	}
+}
+
 void Source::Update(const GameTimer& gt)
 {
-	
+	//Convert Spherical to Cartesian coordinates
+	float x = mRadius * sinf(mPhi) * cosf(mTheta);
+	float z = mRadius * sinf(mPhi) * sinf(mTheta);
+	float y = mRadius * cosf(mPhi);
+
+	//Build the view Matrix
+	XMVECTOR pos = XMVectorSet(x, y, z, 1.0f);
+	XMVECTOR target = XMVectorZero();
+	XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+
+	XMMATRIX view = XMMatrixLookAtLH(pos, target, up);
+	XMStoreFloat4x4(&mView, view);
+
+	XMMATRIX world = XMLoadFloat4x4(&mWorld);
+	XMMATRIX proj = XMLoadFloat4x4(&mProj);
+	XMMATRIX WVP = world * view * proj;
+
+	//Update the constant buffer with the latest World-View-Projection Matrix
+	ObjectConstants objConstants;
+	XMStoreFloat4x4(&objConstants.WVP, XMMatrixTranspose(WVP));
+	mObjectCB->CopyData(0, objConstants);
 }
 
 

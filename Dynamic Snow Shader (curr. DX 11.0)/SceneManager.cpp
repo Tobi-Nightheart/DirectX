@@ -10,6 +10,34 @@ SceneManager::SceneManager(ID3D11RenderTargetView* defaultRTV, D3D11_VIEWPORT* v
 	sc_pViewport = viewport;
 	sc_pGameTimer = gameTimer;
 	sc_pDefaultDSV = defaultDSV;
+
+#pragma region NullInits
+	sc_directional_light_shines_from = XMVectorZero();
+	sc_pBlendAlphaDisable = nullptr;
+	sc_pBlendAlphaEnable = nullptr;
+	sc_pCamera = nullptr;
+	sc_pCameraBirdsEye = nullptr;
+	sc_pContext = nullptr;
+	sc_pDevice = nullptr;
+	sc_pInput = nullptr;
+	sc_pModel = nullptr;
+	sc_pNode_enemy = nullptr;
+	sc_pNode_obj = nullptr;
+	sc_pPlane = nullptr;
+	sc_pRainCompute = nullptr;
+	sc_pRainTex = nullptr;
+	sc_pReflect = nullptr;
+	sc_pReflective = nullptr;
+	sc_pRoot_node = nullptr;
+	sc_pSampler0 = nullptr;
+	sc_pSkybox = nullptr;
+	sc_pSnowTexture = nullptr;
+	sc_pText2D = nullptr;
+	sc_pTexture0 = nullptr;
+	sc_pTexture1 = nullptr;
+	sc_pTexturePlane = nullptr;
+#pragma endregion
+
 }
 
 
@@ -245,7 +273,8 @@ void SceneManager::Render(GameTimer* gameTimer, string fps)
 	{
 		sc_pNode_enemy[i].LookAtAZ(sc_pCamera->GetX(), sc_pCamera->GetZ());
 		sc_pNode_enemy[i].MoveForward(0.5f, sc_pRoot_node, gameTimer->DeltaTime());
-		sc_pNode_enemy[i].FluctuateHeight(.0005f, sc_pRoot_node, gameTimer->TotalTime());
+		//sc_pNode_enemy[i].FluctuateHeight(.0005f, sc_pRoot_node, gameTimer->TotalTime());
+		sc_pNode_enemy[i].FluctuateHeight(.001f, sc_pRoot_node, gameTimer->TotalTime());
 		sc_pSnowTexture->SetPosArray(sc_pNode_enemy[i].GetWorldDeformPosition(), i);
 	}
 
@@ -254,7 +283,7 @@ void SceneManager::Render(GameTimer* gameTimer, string fps)
 		sc_pSnowTexture->CalculateDepression(sc_pDevice, sc_pContext, sc_pGameTimer, i);
 	}
 	
-	sc_pSnowTexture->Draw(&snow, &view, &projection);
+	sc_pSnowTexture->Draw(&snow, &view, &projection, false);
 	sc_pRainCompute->Draw();
 
 	sc_pContext->OMSetBlendState(sc_pBlendAlphaEnable, nullptr, 0xffffffff);

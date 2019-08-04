@@ -24,35 +24,6 @@ half CalcDeformation(float3 PointH, uint3 DTID)
     return (half) (PointH.y + pow(dist, 2) * scale);
 }
 
-float CalcElevation(float DeformH, float SnowH, float FootH)
-{
-    //Depression Variables
-    float FootDist;
-    float DeprDist;
-    //Elevation Variables
-    float MaxElevDist, ElevHeight, ElevRatio, ElevDist;
-
-    //Calculate the distance of depression
-    DeprDist = sqrt(SnowH - FootH);
-
-    //Calculate the distance from the foot
-    FootDist = sqrt(DeformH - FootH);
-    
-    ElevDist = FootDist - DeprDist;
-
-    //Calculating the maximum distance of the elevation (in perspective to the depression)
-    MaxElevDist = scale * (FootDist - DeprDist);
-    
-    //Calculate the ratio of elevation
-    ElevRatio = ElevDist / MaxElevDist;
-    
-    //Calculate the height of the elevation at this point
-    ElevHeight = MaxElevDist * scale;
-
-    return (pow(0.5 - 2 * ElevRatio, 2) + 1) * ElevHeight;
-
-}
-
 [numthreads(32, 32, 1)]
 void Deformation(uint3 DispatchThreadID : SV_DispatchThreadID)
 {

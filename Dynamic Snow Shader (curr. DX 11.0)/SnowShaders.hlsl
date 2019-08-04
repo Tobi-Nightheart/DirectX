@@ -214,8 +214,8 @@ DomainOut DS(PatchTess patchTess, float3 uv : SV_DomainLocation, const OutputPat
     Output.texCoord = uv.x * Tri[0].texCoord + uv.y * Tri[1].texCoord + uv.z * Tri[2].texCoord;
     
     //Pass snow height for later use in PS
-    Output.vSnowPos = Tri[0].vSnowPos;
-    
+    Output.vSnowPos = uv.x * Tri[0].vSnowPos + uv.y * Tri[1].vSnowPos + uv.z * Tri[2].vSnowPos;
+
     //pass the texture variable
     Output.swap = Tri[0].swap;
     

@@ -12,6 +12,33 @@ SnowTexture::SnowTexture(ID3D11Device* device, ID3D11DeviceContext* context, cam
 	s_pContext = context;
 	s_pCamera = c;
 	s_pGameTimer = gt;
+
+#pragma region NullInits
+	s_pinitTexCS = nullptr;
+	s_pVertexBuffer = nullptr;
+	s_pTessellationCB = nullptr;
+	s_pSnowVS = nullptr;
+	s_pSnowDS = nullptr;
+	s_pSnowHS = nullptr;
+	s_pSnowPS = nullptr;
+	s_pDeformCB = nullptr;
+	s_pDeformationCS = nullptr;
+	s_pDeformationHeightMapSRV = nullptr;
+	s_pDeformationHeightMapUAV = nullptr;
+	s_pDeformedTexSRV = nullptr;
+	s_pFillCB = nullptr;
+	s_pFillCS = nullptr;
+	s_pInputLayout = nullptr;
+	s_pLinearSampler = nullptr;
+	s_pMaterialCB = nullptr;
+	s_pMaterialTexSRV = nullptr;
+	s_pObject = nullptr;
+	s_pRaster = nullptr;
+	s_aVerticies[0] = &XMFLOAT3(1.0f, 1.0f, 1.0f);
+	
+#pragma endregion
+
+
 }
 
 HRESULT SnowTexture::Initialize()
@@ -22,10 +49,10 @@ HRESULT SnowTexture::Initialize()
 	hr = s_pObject->LoadObjModel((char*)"Resources/snowplane.obj");
 	if (FAILED(hr)) return hr;
 
-	hr = D3DX11CreateShaderResourceViewFromFile(s_pDevice, "assets/snowtex.jpg", nullptr, nullptr, &s_pMaterialSRV, nullptr);
+	hr = D3DX11CreateShaderResourceViewFromFile(s_pDevice, "assets/snowtex.jpg", nullptr, nullptr, &s_pMaterialTexSRV, nullptr);
 	if (FAILED(hr)) return hr;
 
-	hr = D3DX11CreateShaderResourceViewFromFile(s_pDevice, "assets/texture1.jpg", nullptr, nullptr, &s_pDeformedSRV, nullptr);
+	hr = D3DX11CreateShaderResourceViewFromFile(s_pDevice, "assets/texture1.jpg", nullptr, nullptr, &s_pDeformedTexSRV, nullptr);
 	if (FAILED(hr)) return hr;
 
 	//Creating height map
@@ -73,12 +100,6 @@ HRESULT SnowTexture::Initialize()
 	sampler_desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 	hr = s_pDevice->CreateSamplerState(&sampler_desc, &s_pLinearSampler);
 	if (FAILED(hr)) return hr;
-
-	/*
-	D3D11_BUFFER_DESC buffer_desc;
-	ZeroMemory(&buffer_desc, sizeof(buffer_desc));
-	buffer_desc.BindFlags = D3D11_BIND_UNORDERED_ACCESS;
-	*/
 
 	//Initializing constant buffers for compute
 	//deformation cb
@@ -242,9 +263,9 @@ HRESULT SnowTexture::Initialize()
 	return S_OK;
 }
 
-void SnowTexture::Draw(XMMATRIX* world, XMMATRIX* view, XMMATRIX* proj)
+void SnowTexture::Draw(XMMATRIX* world, XMMATRIX* view, XMMATRIX* proj, bool raster)
 {
-	//st input layout
+	//set input layout
 	s_pContext->IASetInputLayout(s_pInputLayout);
 
 	//Set shader stages
@@ -254,8 +275,10 @@ void SnowTexture::Draw(XMMATRIX* world, XMMATRIX* view, XMMATRIX* proj)
 	s_pContext->PSSetShader(s_pSnowPS, nullptr, 0);
 	
 	//set shader constant buffers
+	//VS
 	s_pContext->VSSetConstantBuffers(0, 1, &s_pTessellationCB);
 	s_pContext->VSSetConstantBuffers(1, 1, &s_pMaterialCB);
+	//HS + DS
 	s_pContext->HSSetConstantBuffers(0, 1, &s_pTessellationCB);
 	s_pContext->DSSetConstantBuffers(0, 1, &s_pTessellationCB);
 	s_pContext->DSSetConstantBuffers(1, 1, &s_pMaterialCB);
@@ -266,14 +289,15 @@ void SnowTexture::Draw(XMMATRIX* world, XMMATRIX* view, XMMATRIX* proj)
 	//for DS
 	s_pContext->DSGetShaderResources(0, 1, &s_pDeformationHeightMapSRV);
 	//for PS
-	s_pContext->PSSetShaderResources(0, 1, &s_pMaterialSRV);
-	s_pContext->PSSetShaderResources(1, 1, &s_pDeformedSRV);
+	s_pContext->PSSetShaderResources(0, 1, &s_pMaterialTexSRV);
+	s_pContext->PSSetShaderResources(1, 1, &s_pDeformedTexSRV);
 
 	//set input topology
 	s_pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST);
 	
 	//set sampler states
 	s_pContext->DSSetSamplers(0, 1, &s_pLinearSampler);
+	s_pContext->PSSetSamplers(0, 1, &s_pLinearSampler);
 
 	//update constant buffers
 	D3D11_MAPPED_SUBRESOURCE source;
@@ -293,18 +317,30 @@ void SnowTexture::Draw(XMMATRIX* world, XMMATRIX* view, XMMATRIX* proj)
 	s_pContext->Unmap(s_pMaterialCB, 0);
 
 	
-	//Set rasterizer state if wireframe is used
-	//ID3D11RasterizerState* default_raster;
-	//s_pContext->RSGetState(&default_raster);
-	//s_pContext->RSSetState(s_pRaster);
+	//check if wireframe is used
+	if (raster) 
+	{
+		//set wireframe rasterizer
+		ID3D11RasterizerState* default_raster;
+		s_pContext->RSGetState(&default_raster);
+		s_pContext->RSSetState(s_pRaster);
+
+		//draw the object
+		ObjFileModel* obj;
+		obj = s_pObject->GetObjectA();
+		obj->Draw();
+
+		//restore rasterizer state
+		s_pContext->RSSetState(default_raster);
+		default_raster->Release();
+	}
+	else
+	{
+		ObjFileModel* obj;
+		obj = s_pObject->GetObjectA();
+		obj->Draw();
+	}
 	
-	ObjFileModel* obj;
-	obj = s_pObject->GetObjectA();
-	obj->Draw();
-	
-	//restore old raster state
-	//s_pContext->RSSetState(default_raster);
-	//default_raster->Release();
 	
 	//clean up tessellation 
 	s_pContext->HSSetShader(nullptr, nullptr, 0);
@@ -319,12 +355,10 @@ void SnowTexture::Draw(XMMATRIX* world, XMMATRIX* view, XMMATRIX* proj)
 	
 	//clean SRVs
 	ID3D11ShaderResourceView* arrSRV[1] = { nullptr };
-	s_pContext->VSGetShaderResources(0, 1, arrSRV);
-	s_pContext->DSGetShaderResources(0, 1, arrSRV);
+	s_pContext->VSSetShaderResources(0, 1, arrSRV);
+	s_pContext->DSSetShaderResources(0, 1, arrSRV);
 	s_pContext->PSSetShaderResources(0, 1, arrSRV);
-	s_pContext->PSGetShaderResources(1, 1, arrSRV);
-	
-
+	s_pContext->PSSetShaderResources(1, 1, arrSRV);
 }
 
 
@@ -350,7 +384,7 @@ void SnowTexture::FillSnow(ID3D11Device * device, ID3D11DeviceContext * context,
 	//set the fill shader
 	context->CSSetShader(s_pFillCS, nullptr, 0);
 
-	//Dispatch 1024 threads to fill the entire texture
+	//Dispatch 32x, 32y, 1 threads to fill the entire texture
 	context->Dispatch(1024, 1, 1);
 
 	//Clean up
@@ -401,7 +435,7 @@ void SnowTexture::InitTex(ID3D11Device* device, ID3D11DeviceContext* context) {
 	//set initialization shader
 	context->CSSetShader(s_pinitTexCS, nullptr, 0);
 
-	context->Dispatch(1024, 1, 1);
+	context->Dispatch(32, 32, 1);
 
 	//clean up
 	context->CSSetShader(nullptr, nullptr, 0);

@@ -51,8 +51,8 @@ private:
 	Model* s_pObject;
 
 	//Texture for the snow
-	ID3D11ShaderResourceView* s_pMaterialSRV;
-	ID3D11ShaderResourceView* s_pDeformedSRV;
+	ID3D11ShaderResourceView* s_pMaterialTexSRV;
+	ID3D11ShaderResourceView* s_pDeformedTexSRV;
 
 	//Rasterizer
 	ID3D11RasterizerState* s_pRaster;
@@ -96,7 +96,7 @@ private:
 public:
 	SnowTexture(ID3D11Device* device, ID3D11DeviceContext* context, camera* c, GameTimer* gt);
 	HRESULT Initialize();
-	void Draw(XMMATRIX* world, XMMATRIX* view, XMMATRIX* proj);
+	void Draw(XMMATRIX* world, XMMATRIX* view, XMMATRIX* proj, bool raster);
 	~SnowTexture();
 	void FillSnow(ID3D11Device* device, ID3D11DeviceContext* context, GameTimer* gt, float rate);
 	void CalculateDepression(ID3D11Device* device, ID3D11DeviceContext* context, GameTimer* gt, int num);

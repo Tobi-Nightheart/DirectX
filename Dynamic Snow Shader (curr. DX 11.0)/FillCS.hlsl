@@ -14,12 +14,12 @@ RWTexture2D<uint> source;
 
 
 //called by dispatch(1, 1024, 1);
-[numthreads(1,1024,1)]
+[numthreads(32,32,1)]
 void FillShader(uint3 dispatchThreadId : SV_DispatchThreadID)
 {
     //setting up the data conversion from uint to r16g16 formatted data 
     float2 usable;
-    
+
     //Convert the data    
     usable = D3DX_R16G16_FLOAT_to_FLOAT2(source[dispatchThreadId.xy]);
     

@@ -280,9 +280,9 @@ void SnowTexture::Draw(XMMATRIX* world, XMMATRIX* view, XMMATRIX* proj, bool ras
 	s_pContext->VSSetConstantBuffers(1, 1, &s_pMaterialCB);
 	//HS + DS
 	s_pContext->HSSetConstantBuffers(0, 1, &s_pTessellationCB);
+	s_pContext->HSSetConstantBuffers(1, 1, &s_pMaterialCB);
 	s_pContext->DSSetConstantBuffers(0, 1, &s_pTessellationCB);
-	s_pContext->DSSetConstantBuffers(1, 1, &s_pMaterialCB);
-
+	
 	//set shader resources
 	//for DS
 	s_pContext->DSSetShaderResources(2, 1, &s_pDeformationHeightMapSRV);

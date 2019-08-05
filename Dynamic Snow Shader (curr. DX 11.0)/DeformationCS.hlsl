@@ -6,8 +6,6 @@ cbuffer Values : register(b0)
 {
     float3 vWorldPos;
     float scale;
-    float2 TexCoord;
-    float2 padding;
 };
 
 RWTexture2D<uint> HeightMap : register(u0);
@@ -39,7 +37,6 @@ void Deformation(uint3 DispatchThreadID : SV_DispatchThreadID)
 
     data = D3DX_R16G16_FLOAT_to_FLOAT2(HeightMap[sWorldPos.xz + DispatchThreadID.xy]);
 
-    DeformationHeight = (half) data.x;
     FootHeight = (half) vWorldPos.y;
 
          

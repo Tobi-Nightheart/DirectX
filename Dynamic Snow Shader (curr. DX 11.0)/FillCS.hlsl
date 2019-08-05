@@ -1,6 +1,4 @@
-
 #include "Inline.hlsl"
-Texture2D UAV : register(t0);
 
 cbuffer CB
 {
@@ -10,10 +8,10 @@ cbuffer CB
 
 
 //This is the incoming deformation texture
-RWTexture2D<uint> source;
+RWTexture2D<uint> source : register(u0);
 
 
-//called by dispatch(1, 1024, 1);
+//called by dispatch(32, 32, 1);
 [numthreads(32,32,1)]
 void FillShader(uint3 dispatchThreadId : SV_DispatchThreadID)
 {

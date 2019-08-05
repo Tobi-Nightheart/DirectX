@@ -83,9 +83,9 @@ HRESULT SnowTexture::Initialize()
 	if (FAILED(hr)) return hr;
 
 	D3D11_UNORDERED_ACCESS_VIEW_DESC uav_desc;
+	ZeroMemory(&uav_desc, sizeof(uav_desc));
 	uav_desc.Format = DXGI_FORMAT_R32_UINT;
 	uav_desc.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE2D;
-	uav_desc.Texture2D.MipSlice = 0;
 
 	hr = s_pDevice->CreateUnorderedAccessView(HeightTexture, &uav_desc, &s_pDeformationHeightMapUAV);
 	if (FAILED(hr)) return hr;
@@ -106,7 +106,7 @@ HRESULT SnowTexture::Initialize()
 	D3D11_BUFFER_DESC cb_desc;
 	ZeroMemory(&cb_desc, sizeof(cb_desc));
 	cb_desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	cb_desc.ByteWidth = 32;
+	cb_desc.ByteWidth = 16;
 	cb_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	cb_desc.Usage = D3D11_USAGE_DYNAMIC;
 
@@ -284,10 +284,8 @@ void SnowTexture::Draw(XMMATRIX* world, XMMATRIX* view, XMMATRIX* proj, bool ras
 	s_pContext->DSSetConstantBuffers(1, 1, &s_pMaterialCB);
 
 	//set shader resources
-	//for VS
-	s_pContext->VSSetShaderResources(0, 1, &s_pDeformationHeightMapSRV);
 	//for DS
-	s_pContext->DSGetShaderResources(0, 1, &s_pDeformationHeightMapSRV);
+	s_pContext->DSSetShaderResources(2, 1, &s_pDeformationHeightMapSRV);
 	//for PS
 	s_pContext->PSSetShaderResources(0, 1, &s_pMaterialTexSRV);
 	s_pContext->PSSetShaderResources(1, 1, &s_pDeformedTexSRV);
@@ -355,8 +353,7 @@ void SnowTexture::Draw(XMMATRIX* world, XMMATRIX* view, XMMATRIX* proj, bool ras
 	
 	//clean SRVs
 	ID3D11ShaderResourceView* arrSRV[1] = { nullptr };
-	s_pContext->VSSetShaderResources(0, 1, arrSRV);
-	s_pContext->DSSetShaderResources(0, 1, arrSRV);
+	s_pContext->DSSetShaderResources(2, 1, arrSRV);
 	s_pContext->PSSetShaderResources(0, 1, arrSRV);
 	s_pContext->PSSetShaderResources(1, 1, arrSRV);
 }
@@ -385,7 +382,7 @@ void SnowTexture::FillSnow(ID3D11Device * device, ID3D11DeviceContext * context,
 	context->CSSetShader(s_pFillCS, nullptr, 0);
 
 	//Dispatch 32x, 32y, 1 threads to fill the entire texture
-	context->Dispatch(1024, 1, 1);
+	context->Dispatch(32, 32, 1);
 
 	//Clean up
 	context->CSSetShader(nullptr, nullptr, 0);

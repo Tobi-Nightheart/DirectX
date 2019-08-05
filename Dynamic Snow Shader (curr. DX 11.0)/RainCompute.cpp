@@ -20,6 +20,36 @@ RainCompute::RainCompute(ID3D11Device* device, ID3D11DeviceContext* context, cam
 	r_fDensity = 1.0f;
 	r_fVerticalSpeed = -5.0f;
 	r_vCurWindEffect = XMVectorSet(1.0f, 1.0f, 0.0f, 0.0f);
+
+#pragma region NullInits
+	initFLOAT = 0;
+
+
+	r_pBlendDefault = nullptr;
+	r_pBlendRender = nullptr;
+	r_pCBDepth = nullptr;
+	r_pCBRenderer = nullptr;
+	r_pCBSimulate = nullptr;
+	r_pCS = nullptr;
+	r_pHeightMapDSV = nullptr;
+	r_pHeightLayout = nullptr;
+	r_pHeightMap2D = nullptr;
+	r_pHeightMapSRV = nullptr;
+	r_pInputLayout = nullptr;
+	r_pRasterState = nullptr;
+	r_pSampler0 = nullptr;
+	r_pSimBuffer = nullptr;
+	r_pSimBufferView = nullptr;
+	r_pPS = nullptr;
+	r_pNoiseSRV = nullptr;
+	r_pStreakSRV = nullptr;
+	r_pUAV = nullptr;
+	r_pVS_Height = nullptr;
+	r_pVS_Out = nullptr;
+	//r_vBoundCenter = XMVectorZero();
+	//r_vBoundHalfSize = XMVectorZero();
+#pragma endregion
+
 }
 
 HRESULT RainCompute::Initialize()

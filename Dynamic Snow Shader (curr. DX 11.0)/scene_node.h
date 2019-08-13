@@ -20,6 +20,8 @@ private:
 	XMVECTOR vDeformPos;
 	XMFLOAT3* deformPos;
 
+	bool bObjDraw;
+
 public:
 	scene_node();
 	~scene_node();
@@ -37,6 +39,7 @@ public:
 	void LookAtAZ(float x, float z);
 	bool MoveForward(float d, scene_node* root_node, float dt);
 	void FluctuateHeight(float d, scene_node* root_node, float dt);
+	void ToggleDrawing();
 
 #pragma region SetterGetterIncrements
 	void SetModel(Model* m);

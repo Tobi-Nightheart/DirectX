@@ -13,6 +13,8 @@ SnowTexture::SnowTexture(ID3D11Device* device, ID3D11DeviceContext* context, cam
 	s_pCamera = c;
 	s_pGameTimer = gt;
 
+	raster = false;
+
 #pragma region NullInits
 	s_pinitTexCS = nullptr;
 	s_pVertexBuffer = nullptr;
@@ -263,7 +265,7 @@ HRESULT SnowTexture::Initialize()
 	return S_OK;
 }
 
-void SnowTexture::Draw(XMMATRIX* world, XMMATRIX* view, XMMATRIX* proj, bool raster)
+void SnowTexture::Draw(XMMATRIX* world, XMMATRIX* view, XMMATRIX* proj)
 {
 	//set input layout
 	s_pContext->IASetInputLayout(s_pInputLayout);
@@ -443,4 +445,9 @@ void SnowTexture::InitTex(ID3D11Device* device, ID3D11DeviceContext* context) {
 void SnowTexture::SetPosArray(XMFLOAT3* pos, int num)
 {
 	s_aVerticies[num] = pos;
+}
+
+void SnowTexture::SwitchRasterState()
+{
+	raster = !raster;
 }

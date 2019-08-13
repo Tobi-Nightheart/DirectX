@@ -15,6 +15,8 @@ scene_node::scene_node()
 	m_Scale = 1.0f;
 	vDeformPos = XMVectorZero();
 	deformPos = new XMFLOAT3();
+
+	bObjDraw = true;
 }
 
 
@@ -53,47 +55,54 @@ bool scene_node::detachNode(scene_node * n)
 
 void scene_node::execute(XMMATRIX * world, XMMATRIX * view, XMMATRIX * projection, XMFLOAT4 AmbC, XMVECTOR DirV, XMFLOAT4 DirC)
 {
-	XMMATRIX local_world = XMMatrixIdentity();
-
-	local_world = XMMatrixRotationX(XMConvertToRadians(m_xAngle));
-	local_world *= XMMatrixRotationY(XMConvertToRadians(m_yAngle));
-	local_world *= XMMatrixRotationZ(XMConvertToRadians(m_zAngle));
-
-	local_world *= XMMatrixScaling(m_Scale, m_Scale, m_Scale);
-
-	local_world *= XMMatrixTranslation(m_px, m_py, m_pz);
-
-	local_world *= *world;
-
-	if (m_p_model) 
+	if (bObjDraw) 
 	{
-		m_p_model->Draw(&local_world, view, projection, AmbC, DirV, DirC);
-	}
-	for(int i = 0; i< (int) m_children.size(); i++)
-	{
-		m_children[i]->execute(&local_world, view, projection, AmbC, DirV, DirC);
+	
+		XMMATRIX local_world = XMMatrixIdentity();
+
+		local_world = XMMatrixRotationX(XMConvertToRadians(m_xAngle));
+		local_world *= XMMatrixRotationY(XMConvertToRadians(m_yAngle));
+		local_world *= XMMatrixRotationZ(XMConvertToRadians(m_zAngle));
+
+		local_world *= XMMatrixScaling(m_Scale, m_Scale, m_Scale);
+
+		local_world *= XMMatrixTranslation(m_px, m_py, m_pz);
+
+		local_world *= *world;
+
+		if (m_p_model) 
+		{
+			m_p_model->Draw(&local_world, view, projection, AmbC, DirV, DirC);
+		}
+		for(int i = 0; i< (int) m_children.size(); i++)
+		{
+			m_children[i]->execute(&local_world, view, projection, AmbC, DirV, DirC);
+		}
 	}
 }
 
 void scene_node::executeOpaque(XMMATRIX* world, XMMATRIX* view, XMMATRIX* projection)
 {
-	XMMATRIX local_world = XMMatrixIdentity();
+	if (bObjDraw)
+	{
+		XMMATRIX local_world = XMMatrixIdentity();
 
-	local_world = XMMatrixRotationX(XMConvertToRadians(m_xAngle));
-	local_world *= XMMatrixRotationY(XMConvertToRadians(m_yAngle));
-	local_world *= XMMatrixRotationZ(XMConvertToRadians(m_zAngle));
+		local_world = XMMatrixRotationX(XMConvertToRadians(m_xAngle));
+		local_world *= XMMatrixRotationY(XMConvertToRadians(m_yAngle));
+		local_world *= XMMatrixRotationZ(XMConvertToRadians(m_zAngle));
 
-	local_world *= XMMatrixScaling(m_Scale, m_Scale, m_Scale);
+		local_world *= XMMatrixScaling(m_Scale, m_Scale, m_Scale);
 
-	local_world *= XMMatrixTranslation(m_px, m_py, m_pz);
+		local_world *= XMMatrixTranslation(m_px, m_py, m_pz);
 
-	local_world *= *world;
+		local_world *= *world;
 
-	if (m_p_model) m_p_model->DrawOpaque(&local_world, view, projection);
+		if (m_p_model) m_p_model->DrawOpaque(&local_world, view, projection);
 
-	for (int i = 0; i < (int) m_children.size(); i++) {
-		m_children[i]->executeOpaque(&local_world, view, projection);
+		for (int i = 0; i < (int) m_children.size(); i++) {
+			m_children[i]->executeOpaque(&local_world, view, projection);
 
+		}
 	}
 }
 
@@ -372,6 +381,11 @@ void scene_node::FluctuateHeight(float d, scene_node* root_node, float dt)
 	if (CheckCollision(root_node)) {
 		m_py = oldy;
 	}
+}
+
+void scene_node::ToggleDrawing()
+{
+	bObjDraw = !bObjDraw;
 }
 
 #pragma region SetterGetterIncrements

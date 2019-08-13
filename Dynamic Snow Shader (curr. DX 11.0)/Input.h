@@ -1,6 +1,8 @@
 #pragma once
 #include <dinput.h>
 #include "RainCompute.h"
+#include "SnowTexture.h"
+#include "scene_node.h"
 
 class Input
 {
@@ -16,7 +18,7 @@ public:
 	HRESULT Initialize(HINSTANCE inst, HWND wnd);
 	void ReadInputStates();
 	bool IsKeyPressed(unsigned char DI_keycode);
-	void KeyboardInput(camera* cam, camera* cam2, RainCompute* rain, float dt);
+	void KeyboardInput(camera* cam, RainCompute* rain, SnowTexture* snow, scene_node* sn, float dt);
 	void MouseInput(camera* cam);
 	~Input();
 };

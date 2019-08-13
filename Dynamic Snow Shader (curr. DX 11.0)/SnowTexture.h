@@ -8,6 +8,9 @@ class SnowTexture
 {
 private:
 
+	//raster decider true: wireframe, false: solid
+	bool raster;
+
 	//Device, Context pointers
 	ID3D11Device* s_pDevice;
 	ID3D11DeviceContext* s_pContext;
@@ -96,7 +99,7 @@ private:
 public:
 	SnowTexture(ID3D11Device* device, ID3D11DeviceContext* context, camera* c, GameTimer* gt);
 	HRESULT Initialize();
-	void Draw(XMMATRIX* world, XMMATRIX* view, XMMATRIX* proj, bool raster);
+	void Draw(XMMATRIX* world, XMMATRIX* view, XMMATRIX* proj);
 	~SnowTexture();
 	void FillSnow(ID3D11Device* device, ID3D11DeviceContext* context, GameTimer* gt, float rate);
 	void CalculateDepression(ID3D11Device* device, ID3D11DeviceContext* context, GameTimer* gt, int num);
@@ -105,4 +108,5 @@ public:
 
 	//Getter and setter
 	void SetPosArray(XMFLOAT3* pos, int num);
+	void SwitchRasterState();
 };

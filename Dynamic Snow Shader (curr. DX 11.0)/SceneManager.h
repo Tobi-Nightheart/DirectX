@@ -17,7 +17,6 @@ private:
 	//plane
 	Model* sc_pPlane;
 
-
 	//Nodes
 	scene_node* sc_pRoot_node;
 	scene_node* sc_pNode_enemy;

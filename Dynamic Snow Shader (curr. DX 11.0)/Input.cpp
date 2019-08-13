@@ -67,7 +67,7 @@ bool Input::IsKeyPressed(unsigned char DI_keycode)
 	return g_keyboard_state[DI_keycode] & 0x80;
 }
 
-void Input::KeyboardInput(camera* cam, camera* cam2, RainCompute* rain, float dt)
+void Input::KeyboardInput(camera* cam, RainCompute* rain, SnowTexture* snow, scene_node* sn, float dt)
 {
 	if (IsKeyPressed(DIK_ESCAPE)) DestroyWindow(g_iWnd);
 	if (IsKeyPressed(DIK_W)) cam->Forward(5.0f*dt);
@@ -78,16 +78,12 @@ void Input::KeyboardInput(camera* cam, camera* cam2, RainCompute* rain, float dt
 	if (IsKeyPressed(DIK_E)) cam->Rotate(-50.0f*dt, 0.f*dt);
 	if (IsKeyPressed(DIK_Z)) cam->Rotate(0.f*dt, 50.0f*dt);
 	if (IsKeyPressed(DIK_X)) cam->Rotate(0.f*dt, -50.0f*dt);
-	if (IsKeyPressed(DIK_G))
-	{
-		cam->SetActive(!cam->GetActive());
-		cam2->SetActive(!cam2->GetActive());
-	}
+
 	if (IsKeyPressed(DIK_1)) rain->SetDensity(0.0f);
-	if (IsKeyPressed(DIK_2)) rain->SetDensity(0.3f);
-	if (IsKeyPressed(DIK_3)) rain->SetDensity(0.5f);
-	if (IsKeyPressed(DIK_4)) rain->SetDensity(0.75f);
-	if (IsKeyPressed(DIK_5)) rain->SetDensity(1.0f);
+	if (IsKeyPressed(DIK_2)) rain->SetDensity(0.5f);
+	if (IsKeyPressed(DIK_3)) rain->SetDensity(1.0f);
+	if (IsKeyPressed(DIK_4)) sn->ToggleDrawing();
+	if (IsKeyPressed(DIK_5)) snow->SwitchRasterState();
 }
 
 void Input::MouseInput(camera* cam)

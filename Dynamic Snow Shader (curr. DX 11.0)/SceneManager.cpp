@@ -100,6 +100,12 @@ HRESULT SceneManager::Initialize(ID3D11Device* device, ID3D11DeviceContext* cont
 	sc_pNode_enemy = new scene_node[5];
 	sc_pNode_obj = new scene_node[5];
 
+
+	sc_pCamera = new camera(0.0f, 1.0f, -5.0f, 0.0f, 0, sc_pRoot_node, true);
+
+	sc_pSnowTexture = new SnowTexture(sc_pDevice, sc_pContext, sc_pCamera, sc_pGameTimer);
+	sc_pSnowTexture->Initialize();
+
 	//initialize textures
 	string a = "assets/texture1.jpg";
 	string b = "assets/texture2.jpg";
@@ -139,6 +145,7 @@ HRESULT SceneManager::Initialize(ID3D11Device* device, ID3D11DeviceContext* cont
 		sc_pModel[i].LoadObjModel((char*)"Resources/sphere.obj");
 		sc_pModel[i].SetTexture(sc_pTexture1);
 		sc_pNode_enemy[i-5].SetModel(&sc_pModel[i]);
+		sc_pSnowTexture->SetPosArray(sc_pNode_enemy[i-5].GetWorldDeformPosition(), i-5);
 	}
 	//placing the enemies
 	sc_pNode_enemy[0].SetX(  1.0f, sc_pRoot_node);
@@ -201,12 +208,6 @@ HRESULT SceneManager::Initialize(ID3D11Device* device, ID3D11DeviceContext* cont
 	
 	sc_pReflect = new Reflective(sc_pDevice, sc_pContext);
 	sc_pReflect->LoadObjModel((char*)"Resources/sphere.obj");
-
-
-
-
-	sc_pCamera = new camera(0.0f, 1.0f, -5.0f, 0.0f, 0, sc_pRoot_node, true);
-	sc_pCameraBirdsEye = new camera(0.0f, 20.0f, 0.0f, 0.0f, -90.0f, sc_pRoot_node, false);
 	
 
 	sc_pRainCompute = new RainCompute(sc_pDevice, sc_pContext, sc_pCamera, sc_pGameTimer);
@@ -217,8 +218,7 @@ HRESULT SceneManager::Initialize(ID3D11Device* device, ID3D11DeviceContext* cont
 	
 	sc_ambient_light_colour = { .1f,.1f, .1f, 0.0f };
 
-	sc_pSnowTexture = new SnowTexture(sc_pDevice, sc_pContext, sc_pCamera, sc_pGameTimer);
-	sc_pSnowTexture->Initialize();
+	
 
 	return S_OK;
 }
@@ -250,13 +250,11 @@ void SceneManager::Render(GameTimer* gameTimer, string fps)
 	//Draw the scene in camera view
 	sc_pInput->ReadInputStates();
 	//put into its own input player input class
-	sc_pInput->KeyboardInput(sc_pCamera, sc_pCameraBirdsEye, sc_pRainCompute, gameTimer->DeltaTime());
-	camera* drawcam;
+	sc_pInput->KeyboardInput(sc_pCamera, sc_pRainCompute, sc_pSnowTexture, sc_pRoot_node, gameTimer->DeltaTime());
+	
+	
+	camera* drawcam = nullptr;
 	if (sc_pCamera->GetActive()) drawcam = sc_pCamera;
-	else
-	{
-		drawcam = sc_pCameraBirdsEye;
-	}
 	
 	projection = drawcam->GetProjMatrix();
 	
@@ -275,7 +273,7 @@ void SceneManager::Render(GameTimer* gameTimer, string fps)
 		sc_pNode_enemy[i].MoveForward(0.5f, sc_pRoot_node, gameTimer->DeltaTime());
 		//sc_pNode_enemy[i].FluctuateHeight(.0005f, sc_pRoot_node, gameTimer->TotalTime());
 		sc_pNode_enemy[i].FluctuateHeight(.001f, sc_pRoot_node, gameTimer->TotalTime());
-		sc_pSnowTexture->SetPosArray(sc_pNode_enemy[i].GetWorldDeformPosition(), i);
+		
 	}
 
 	//Calculate the deformation
@@ -283,7 +281,7 @@ void SceneManager::Render(GameTimer* gameTimer, string fps)
 		sc_pSnowTexture->CalculateDepression(sc_pDevice, sc_pContext, sc_pGameTimer, i);
 	}
 	
-	sc_pSnowTexture->Draw(&snow, &view, &projection, false);
+	sc_pSnowTexture->Draw(&snow, &view, &projection);
 	sc_pRainCompute->Draw();
 
 	sc_pContext->OMSetBlendState(sc_pBlendAlphaEnable, nullptr, 0xffffffff);

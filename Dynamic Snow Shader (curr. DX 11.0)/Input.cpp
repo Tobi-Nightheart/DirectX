@@ -78,6 +78,8 @@ void Input::KeyboardInput(camera* cam, RainCompute* rain, SnowTexture* snow, sce
 	if (IsKeyPressed(DIK_E)) cam->Rotate(-50.0f*dt, 0.f*dt);
 	if (IsKeyPressed(DIK_Z)) cam->Rotate(0.f*dt, 50.0f*dt);
 	if (IsKeyPressed(DIK_X)) cam->Rotate(0.f*dt, -50.0f*dt);
+	if (IsKeyPressed(DIK_I)) cam->Jump(1.0f*dt);
+	if (IsKeyPressed(DIK_K)) cam->Jump(-1.0f*dt);
 
 	if (IsKeyPressed(DIK_1)) rain->SetDensity(0.0f);
 	if (IsKeyPressed(DIK_2)) rain->SetDensity(0.5f);

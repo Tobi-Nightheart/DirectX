@@ -8,5 +8,5 @@ cbuffer HeightConstants : register(b0)
 //Vertex Shader that outputs the depths
 float4 HeightMapVS(float4 Pos : POSITION) : SV_POSITION
 {
-    return mul(Pos, ToHeight);
+    return mul(ToHeight, Pos);
 }

@@ -78,7 +78,9 @@ void camera::Strafe(float distance)
 
 void camera::Jump(float distance)
 {
-	m_position.y += distance;
+	m_y += distance;
+	UpdatePosition();
+	UpdateLookaAt();
 }
 
 XMVECTOR camera::GetOrthogonal()

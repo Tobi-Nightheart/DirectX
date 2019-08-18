@@ -259,7 +259,7 @@ HRESULT SnowTexture::Initialize()
 	hr = s_pDevice->CreateComputeShader(initTexCS->GetBufferPointer(), initTexCS->GetBufferSize(), nullptr, &s_pinitTexCS);
 	if (FAILED(hr)) return hr;
 
-	InitTex(s_pDevice, s_pContext);
+	//InitTex(s_pDevice, s_pContext);
 
 
 	return S_OK;

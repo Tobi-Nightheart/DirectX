@@ -34,6 +34,10 @@ void Deformation(uint3 DispatchThreadID : SV_DispatchThreadID)
     float3 sWorldPos = vWorldPos / 0.04;
     sWorldPos.x -= 16;
     sWorldPos.z -= 16;
+    //to center the texture around 0,0
+    sWorldPos.x += 512;
+    sWorldPos.y += 512;
+    
 
     data = D3DX_R16G16_FLOAT_to_FLOAT2(HeightMap[sWorldPos.xz + DispatchThreadID.xy]);
 

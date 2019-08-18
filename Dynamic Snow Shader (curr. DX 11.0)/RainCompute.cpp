@@ -457,19 +457,26 @@ void RainCompute::UpdateTransforms()
 	vCamDir.y = 0.0f;
 	vCamDir = XMVector3Normalize(vCamDir);
 	XMVECTOR vOffset = XMVectorSet(vCamDir.x * r_vBoundHalfSize.x, 0.0f, vCamDir.z * r_vBoundHalfSize.z, 1.0f);
-	//r_vBoundCenter = vCamPos + vOffset * 0.8f; //keep 20 percent behind the camera
-	r_vBoundCenter = vCamPos + vOffset * 0.2f;
+	r_vBoundCenter = vCamPos + vOffset * 0.8f; //keep 20 percent behind the camera
+	//r_vBoundCenter = vCamPos + vOffset * 0.2f;
 
+	
 	//build the view matrix for the rain volume
 	XMVECTOR vEye = r_vBoundCenter;
 	vEye.y +=  r_vBoundHalfSize.y;
 	XMVECTOR vAt = r_vBoundCenter;
 	XMVECTOR vUp = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
 	r_mRainView = XMMatrixLookAtLH(vEye, vAt, vUp);
-	
+	/*
+	XMVECTOR vEye = XMVectorZero();
+	vEye.y += r_vBoundHalfSize.y;
+	XMVECTOR vAt = XMVectorZero();
+	XMVECTOR vUp = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
+	r_mRainView = XMMatrixLookAtLH(vEye, vAt, vUp);
+*/
 	//build the projection matrix
-	r_mRainProj = XMMatrixOrthographicOffCenterLH(-r_vBoundHalfSize.x, r_vBoundHalfSize.x, -r_vBoundHalfSize.y, r_vBoundHalfSize.y, 0.0f, 2.0f *r_vBoundHalfSize.z);
-	
+	r_mRainProj = XMMatrixOrthographicOffCenterLH(-r_vBoundHalfSize.x, r_vBoundHalfSize.x, -r_vBoundHalfSize.y, r_vBoundHalfSize.y, 0.0f, 2.0f* r_vBoundHalfSize.z);
+
 	//calculate the the transformation matrix
 	r_mRainViewProj = XMMatrixMultiply(r_mRainView, r_mRainProj);
 }

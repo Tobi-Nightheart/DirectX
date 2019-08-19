@@ -14,7 +14,7 @@ struct Vertex
 
 struct ObjectConstants
 {
-	XMFLOAT4X4 WVP;
+	XMFLOAT4X4 WVP = MathHelper::Identity4x4();
 };
 
 class Source : public D3DApp
@@ -22,6 +22,7 @@ class Source : public D3DApp
 public:
 	Source(HINSTANCE hInstance);
 	Source(const Source& rhs) = delete;
+	Source& operator=(const Source& rhs) = delete;
 	~Source();
 
 	virtual bool Initialize() override;
@@ -84,7 +85,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance, PSTR cmdLine, in
 	}
 	catch(DxException &e)
 	{
-		MessageBox(nullptr, reinterpret_cast<LPCSTR>(e.ToString().c_str()), "HR FAILED", MB_OK);
+		MessageBox(nullptr, e.ToString().c_str(), L"HR Failed", MB_OK);
 		return 0;
 	}
 }
@@ -94,7 +95,8 @@ Source::Source(HINSTANCE hInstance) : D3DApp(hInstance)
 }
 
 Source::~Source()
-= default;
+{
+}
 
 bool Source::Initialize()
 {
@@ -171,13 +173,13 @@ void Source::Draw(const GameTimer& gt)
 
 	//clear back buffer and depth buffer
 	mCommandList->ClearRenderTargetView(CurrentBackBufferView(), Colors::Black, 0, nullptr);
-	mCommandList->ClearDepthStencilView(DepthStencilView(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+	mCommandList->ClearDepthStencilView(DepthStencilView(), D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, nullptr);
 
 	//specify the buffers to render to
 	mCommandList->OMSetRenderTargets(1, &CurrentBackBufferView(), true, &DepthStencilView());
 
-	ID3D12DescriptorHeap* descriptorHeap[] = { mCBVHeap.Get() };
-	mCommandList->SetDescriptorHeaps(1, descriptorHeap);
+	ID3D12DescriptorHeap* descriptorHeaps[] = { mCBVHeap.Get() };
+	mCommandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
 
 	mCommandList->SetGraphicsRootSignature(mRootSignature.Get());
 
@@ -275,7 +277,7 @@ void Source::BuildConstantBuffers()
 
 	D3D12_CONSTANT_BUFFER_VIEW_DESC	cbv_Desc;
 	cbv_Desc.BufferLocation = cbAddress;
-	cbv_Desc.SizeInBytes = objCBByteSize;
+	cbv_Desc.SizeInBytes = objCBByteSize;  //Might need CHANGE
 
 	md3dDevice->CreateConstantBufferView(&cbv_Desc, mCBVHeap->GetCPUDescriptorHandleForHeapStart());
 }
@@ -287,6 +289,7 @@ void Source::BuildRootSignature()
 	//create single descriptor table for cbvs
 	CD3DX12_DESCRIPTOR_RANGE cbvTable;
 	cbvTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0);
+	slotRootParameter[0].InitAsDescriptorTable(1, &cbvTable);
 
 	CD3DX12_ROOT_SIGNATURE_DESC rootSigDesc(1, slotRootParameter, 0, nullptr, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
 
@@ -315,7 +318,7 @@ void Source::BuildShadersAndInputLayout()
 	mInputLayout =
 	{
 		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
-		{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
+		{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
 	};
 }
 

@@ -8,6 +8,11 @@ It is a demo build with the Microsoft DirectX 11 SDK (June 2010) as this is the 
 The demo includes a particle system with a hightmap pass to determin collision and simulation in Compute.
 There is also a snowtexture which gets deformed. The deformed parts are rendered with wood texture just to
 clearly mark the deformed parts. The mesh for the texture is tessellated to enhance the detail of the deformation.
+The snow shader is based on the approach of Rise of the Tomb Raider as described by Anton Kai Michaels and
+Peter Sikachev in Deferred Snow Deformation in Rise of the Tomb Raider published in GPU PRO7.
+The tessellation stage is inspired by the adaptive tessellation demo in the June 2010 SDK package.
+Currently there is an error in the linkage between the dynamic objects and the deformation shader thus it is not
+working correctly.
 
 The inputs on the Dynamic Snow Shader demo are:
 W = camera forward

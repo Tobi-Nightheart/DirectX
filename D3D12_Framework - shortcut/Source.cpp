@@ -15,6 +15,8 @@ struct Vertex
 struct ObjectConstants
 {
 	XMFLOAT4X4 WVP = MathHelper::Identity4x4();
+	XMFLOAT4 PulseColor = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	float Time = 0.f;
 };
 
 class Source : public D3DApp
@@ -154,6 +156,8 @@ void Source::Update(const GameTimer& gt)
 	//Update the constant buffer with the latest World-View-Projection Matrix
 	ObjectConstants objConstants;
 	XMStoreFloat4x4(&objConstants.WVP, XMMatrixTranspose(WVP));
+	objConstants.PulseColor = XMFLOAT4(0.5f, 0.2f, 0.6f, 1.0f);
+	objConstants.Time = gt.TotalTime();
 	mObjectCB->CopyData(0, objConstants);
 }
 

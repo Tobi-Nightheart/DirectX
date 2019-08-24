@@ -130,6 +130,8 @@
     <ClInclude Include="Common\d3dUtil.h" />
     <ClInclude Include="Common\GameTimer.h" />
     <ClInclude Include="d3dx12.h" />
+    <ClInclude Include="FrameResource.h" />
+    <ClInclude Include="GeometryGenerator.h" />
     <ClInclude Include="pcH.h" />
     <ClInclude Include="UploadBuffer.h" />
   </ItemGroup>
@@ -137,6 +139,8 @@
     <ClCompile Include="Common\d3dApp.cpp" />
     <ClCompile Include="Common\d3dUtil.cpp" />
     <ClCompile Include="Common\GameTimer.cpp" />
+    <ClCompile Include="FrameResource.cpp" />
+    <ClCompile Include="GeometryGenerator.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>

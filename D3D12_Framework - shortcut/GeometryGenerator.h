@@ -55,6 +55,7 @@ public:
 				for (size_t i = 0; i < Indices32.size(); i++)
 					mIndices16[i] = static_cast<uint16>(Indices32[i]);
 			}
+			return mIndices16;
 		}
 	private:
 		vector<uint16> mIndices16;

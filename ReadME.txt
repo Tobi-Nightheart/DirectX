@@ -2,6 +2,8 @@ D3D12 Framework:
 This is a work in progress to build a framework on DX12.
 The framework is based on the book: Introduction to 3D Game Programming with DirectX 12 by Frank D. Luna.
 Once the framework is ready for lighting I will add advanced lighting techniques to the framework.
+Hold 1 for wireframe
+use left click and drag mouse to turn camera
 
 Dynamic Snow Shader:
 It is a demo build with the Microsoft DirectX 11 SDK (June 2010) as this is the DirectX version my courses were on.

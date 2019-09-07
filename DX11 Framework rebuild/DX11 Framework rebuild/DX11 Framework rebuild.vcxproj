@@ -141,15 +141,17 @@
     <ClCompile Include="src\GameTimer.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Model.cpp" />
+    <ClCompile Include="src\ObjFileModel.cpp" />
     <ClCompile Include="src\pcH.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\GameTimer.h" />
     <ClInclude Include="src\Model.h" />
+    <ClInclude Include="src\ObjFileModel.h" />
     <ClInclude Include="src\pcH.h" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Shader Files\model.hlsl">
+    <FxCompile Include="Shader\model.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>

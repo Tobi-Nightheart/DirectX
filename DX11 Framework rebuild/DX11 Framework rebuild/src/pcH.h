@@ -7,6 +7,7 @@
 #include <Windows.h>
 #include <windowsx.h>
 #include <d3d11.h>
+#include <d3d11_3.h>
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
 #include <DirectXPackedVector.h>

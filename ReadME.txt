@@ -5,7 +5,11 @@ Once the framework is ready for lighting I will add advanced lighting techniques
 Hold 1 for wireframe
 use left click and drag mouse to turn camera
 
-Dynamic Snow Shader:
+Dynamic Snow Shader (legacy):
+#
+#This project is going to be converted to the DX 11.1 Framework Rebuild which will be written without the usage of the Microsoft DirectX 11 SDK (June 2010) and might use some features introduced in DX11.1
+#There will be various bugfixes, improvements and general code cleaning going on as this is only loosly based on the framework I learned DirectX with
+#
 It is a demo build with the Microsoft DirectX 11 SDK (June 2010) as this is the DirectX version my courses were on.
 The demo includes a particle system with a hightmap pass to determin collision and simulation in Compute.
 There is also a snowtexture which gets deformed. The deformed parts are rendered with wood texture just to

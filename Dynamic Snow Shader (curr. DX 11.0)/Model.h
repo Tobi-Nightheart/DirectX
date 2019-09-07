@@ -7,8 +7,6 @@ private:
 	struct MODEL_CONSTANT_BUFFER {
 		XMMATRIX WorldViewProjection; //64 bytes
 		XMMATRIX world;			//64
-
-
 	};
 
 	struct Light_CB
@@ -93,6 +91,7 @@ public:
 	float GetZAngle();
 	float GetScale();
 	float GetBoundingSphereRadius();
+	XMMATRIX GetWorld();
 #pragma endregion 
 };
 

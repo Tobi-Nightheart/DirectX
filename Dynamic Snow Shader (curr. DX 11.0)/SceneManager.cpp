@@ -242,6 +242,8 @@ void SceneManager::Render(GameTimer* gameTimer, string fps)
 	sc_pRainCompute->HeightMapPrep();
 	projection = sc_pRainCompute->GetProj();
 	view = sc_pRainCompute->GetView();
+	//world= sc_pPlane->GetWorld();
+	//sc_pRainCompute->SetHeightMapConstantBuffer(world);
 	sc_pPlane->DrawOpaque(&plane, &view, &projection);
 	sc_pRoot_node->executeOpaque(&world, &view, &projection);
 	sc_pReflect->DrawOpaque(&view, &projection);
@@ -273,7 +275,7 @@ void SceneManager::Render(GameTimer* gameTimer, string fps)
 		sc_pNode_enemy[i].MoveForward(0.5f, sc_pRoot_node, gameTimer->DeltaTime());
 		//sc_pNode_enemy[i].FluctuateHeight(.0005f, sc_pRoot_node, gameTimer->TotalTime());
 		sc_pNode_enemy[i].FluctuateHeight(.001f, sc_pRoot_node, gameTimer->TotalTime());
-		
+		sc_pSnowTexture[i].SetPosArray(sc_pNode_enemy->GetWorldDeformPosition(), i);
 	}
 
 	//Calculate the deformation

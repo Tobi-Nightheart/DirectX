@@ -31,7 +31,9 @@ void Deformation(uint3 DispatchThreadID : SV_DispatchThreadID)
     float2 data;
     
     //scaled World position to read/write the correct data and offset the position to write in an 32x32 grid
-    float3 sWorldPos = vWorldPos / 0.04;
+    float3 sWorldPos;
+    sWorldPos.x = vWorldPos.x / 0.04;
+    sWorldPos.z = vWorldPos.z / 0.04;
     sWorldPos.x -= 16;
     sWorldPos.z -= 16;
     //to center the texture around 0,0

@@ -118,7 +118,7 @@ XMFLOAT3* scene_node::GetWorldDeformPosition()
 	XMVECTOR t = XMVectorSet(m_world_centre_x, m_world_centre_y, m_world_centre_z, 0.0f);
     vDeformPos = XMVectorSubtract(t, e);
 	XMStoreFloat3(deformPos, vDeformPos);
-	return  deformPos;
+	return deformPos;
 }
 
 void scene_node::UpdateCollisionTree(XMMATRIX * world, float scale)
@@ -666,6 +666,10 @@ float scene_node::GetZAngle()
 float scene_node::GetScale()
 {
 	return m_Scale;
+}
+XMMATRIX scene_node::GetWorld()
+{
+	return m_local_world_matrix;
 }
 #pragma endregion
 

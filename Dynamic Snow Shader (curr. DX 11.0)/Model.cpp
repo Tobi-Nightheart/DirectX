@@ -427,6 +427,14 @@ float Model::GetBoundingSphereRadius()
 {
 	return m_bounding_sphere_radius * m_Scale;
 }
+XMMATRIX Model::GetWorld()
+{
+	XMMATRIX world;
+	world = XMMatrixScaling(m_Scale, m_Scale, m_Scale);
+	world = XMMatrixRotationRollPitchYaw(m_xAngle, m_yAngle, m_zAngle);
+	world = XMMatrixTranslation(m_px, m_py, m_pz);
+	return world;
+}
 #pragma endregion 
 
 

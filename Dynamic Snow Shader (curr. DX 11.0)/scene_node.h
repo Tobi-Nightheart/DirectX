@@ -64,6 +64,7 @@ public:
 	float GetYAngle();
 	float GetZAngle();
 	float GetScale();
+	XMMATRIX GetWorld();
 #pragma endregion
 	
 };

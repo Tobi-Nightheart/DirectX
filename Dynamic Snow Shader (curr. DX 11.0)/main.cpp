@@ -43,7 +43,6 @@ string s_fps;
 Input* g_pInput;
 
 
-// Rename for each tutorial – This will appear in the title bar of the window
 char		g_TutorialName[100] = "Framework\0";
 
 

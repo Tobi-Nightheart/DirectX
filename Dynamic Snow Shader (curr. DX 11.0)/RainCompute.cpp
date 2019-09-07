@@ -303,7 +303,6 @@ void RainCompute::HeightMapPrep()
 	//set the height map for rendering
 	ID3D11RenderTargetView* nullView = nullptr;
 	r_pContext->OMSetRenderTargets(1, &nullView, r_pHeightMapDSV);
-
 	//fill the height generation matrix
 	D3D11_MAPPED_SUBRESOURCE mapped;
 	r_pContext->Map(r_pCBDepth, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
@@ -319,7 +318,7 @@ void RainCompute::HeightMapPrep()
 	//set shaders
 	r_pContext->VSSetShader(r_pVS_Height, nullptr, 0);
 	r_pContext->PSSetShader(nullptr, nullptr, 0);
-}
+}	
 
 void RainCompute::PreRender()
 {

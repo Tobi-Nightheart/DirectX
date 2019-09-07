@@ -372,6 +372,17 @@ float Reflective::GetBoundingSphereRadius()
 	return r_bounding_sphere_radius * r_Scale;
 }
 
+XMMATRIX Reflective::GetWorld()
+{
+	XMMATRIX world;
+	world = XMMatrixScaling(r_Scale, r_Scale, r_Scale);
+	world = XMMatrixRotationZ(r_zAngle);
+	world = XMMatrixRotationY(r_yAngle);
+	world = XMMatrixRotationX(r_xAngle);
+	world = XMMatrixTranslation(r_px, r_py, r_pz);
+	return world;
+}
+
 
 
 Reflective::~Reflective()

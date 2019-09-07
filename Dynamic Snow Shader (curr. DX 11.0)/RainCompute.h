@@ -125,6 +125,7 @@ public:
 	void Draw();
 	void HeighMapPass(ID3D11RenderTargetView* defaultRTV, ID3D11DepthStencilView* defaultDSV, D3D11_VIEWPORT* viewport);
 	void HeightMapPrep();
+	void SetHeightMapConstantBuffer(XMMATRIX world);
 	void PreRender();
 	void Render();
 	void UpdateTransforms();

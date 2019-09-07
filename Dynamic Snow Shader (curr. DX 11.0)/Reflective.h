@@ -84,5 +84,6 @@ public:
 	float GetZAngle();
 	float GetScale();
 	float GetBoundingSphereRadius();
+	XMMATRIX GetWorld();
 };
 

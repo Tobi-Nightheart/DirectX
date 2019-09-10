@@ -190,3 +190,191 @@ void Model::Draw(XMMATRIX& world, XMMATRIX& view, XMMATRIX& projection, XMFLOAT4
 	m_pObject->Draw();
 	
 }
+
+void Model::DepthPass(XMMATRIX& world, XMMATRIX& view, XMMATRIX& projection)
+{
+	MODEL_CB CB;
+	CB.WVP = world * view * projection;
+	CB.World = world;
+	m_pContext->UpdateSubresource(m_pModelCB.Get(), 0, nullptr, &CB, 0, 0);
+	m_pContext->VSSetConstantBuffers(0, 1, m_pModelCB.GetAddressOf());
+
+	m_pContext->IASetInputLayout(m_pInputLayout.Get());
+	m_pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	m_pContext->RSSetState(m_pRaster.Get());
+	m_pContext->PSSetShader(nullptr, nullptr, 0);
+
+	m_pObject->Draw();
+}
+
+XMMATRIX Model::GetWorld()
+{
+	XMMATRIX world;
+	world = XMMatrixScaling(m_scale, m_scale, m_scale);
+	world = XMMatrixRotationRollPitchYaw(m_xA, m_yA, m_zA);
+	world = XMMatrixTranslationFromVector(m_Position);
+	return world;
+}
+
+XMVECTOR Model::GetBoundingSphereWSPosition()
+{
+	return XMVector3Transform(m_BSC_Pos, GetWorld());
+}
+
+ObjFileModel* Model::GetObject()
+{
+	return m_pObject;
+}
+
+void Model::LookAt(float x, float z)
+{
+	XMFLOAT3 position;
+	XMStoreFloat3(&position, m_Position);
+	float dx, dz;
+	dx = x - position.x;
+	dz = z - position.z;
+
+	m_yA = (float) atan2(dx, dz) * (float)(180.0 / XM_PI);
+}
+
+void Model::MoveForward(float d)
+{
+
+}
+
+void Model::CalculateModelCenterPoint()
+{
+	float min_x = 0.0f, min_y = 0.0f, min_z = 0.0f, max_x = 0.0f, max_y = 0.0f, max_z = 0.0f;
+	for (int i = 0; i < (int)m_pObject->numVerts; i++)
+	{
+		if (min_x > m_pObject->vertices[i].Pos.x)
+			min_x = m_pObject->vertices[i].Pos.x;
+		if (min_y > m_pObject->vertices[i].Pos.y)
+			min_y = m_pObject->vertices[i].Pos.y;
+		if (min_z > m_pObject->vertices[i].Pos.z)
+			min_z= m_pObject->vertices[i].Pos.z;
+		if (max_x < m_pObject->vertices[i].Pos.x)
+			max_x = m_pObject->vertices[i].Pos.x;
+		if (max_y < m_pObject->vertices[i].Pos.y)
+			max_y = m_pObject->vertices[i].Pos.y;
+		if (max_z < m_pObject->vertices[i].Pos.z)
+			max_z = m_pObject->vertices[i].Pos.z;
+	}
+	m_BSC_Pos = XMVectorSet((min_x + max_x) / 2, (min_y + max_y) / 2, (min_z + max_z) / 2, 0.0f);
+}
+
+void Model::CalculateBoundingSphereRadius()
+{
+	float maxdist = 0.0f;
+	float curr;
+	XMFLOAT3 center;
+	XMStoreFloat3(&center, m_BSC_Pos);
+	for (int i = 0; i < (int)m_pObject->numVerts; i++)
+	{
+		curr = (float) (pow(center.x - m_pObject->vertices[i].Pos.x, 2) + pow(center.y - m_pObject->vertices[i].Pos.y, 2) + pow(center.z - m_pObject->vertices[i].Pos.z, 2));
+		if (curr > maxdist) maxdist = curr;
+	}
+	m_BSC_radius = (float) (sqrt(maxdist) * m_scale);
+}
+
+#pragma region GetterSetterIncrementerMethods
+void Model::SetTexture(ID3D11ShaderResourceView* tex)
+{
+	m_pTexture0 = tex;
+}
+
+void Model::SetSampler(ID3D11SamplerState* sampler)
+{
+	m_pSampler0 = sampler;
+}
+
+void Model::SetDeviceAndContext(ID3D11Device* Device, ID3D11DeviceContext* Context)
+{
+	m_pDevice = Device;
+	m_pContext = Context;
+}
+
+void Model::ChangePos(DirectX::XMVECTOR delta, bool isPoint)
+{
+	if (isPoint)
+		m_Position = delta;
+	else m_Position += delta;
+}
+
+void Model::IncXA(float a)
+{
+	m_xA += a;
+}
+
+void Model::IncYA(float a)
+{
+	m_yA += a;
+}
+
+void Model::IncZA(float a)
+{
+	m_zA += a;
+}
+
+void Model::IncScale(float num)
+{
+	m_scale += num;
+}
+
+void Model::SetXA(float a)
+{
+	m_xA = a;
+}
+
+void Model::SetYA(float a)
+{
+	m_yA = a;
+}
+
+void Model::SetZA(float a)
+{
+	m_zA = a;
+}
+
+void Model::SetScale(float scale)
+{
+	m_scale = scale;
+}
+
+DirectX::XMVECTOR Model::GetPosition()
+{
+	return m_Position;
+}
+
+float Model::GetXA()
+{
+	return m_xA;
+}
+
+float Model::GetYA()
+{
+	return m_yA;
+}
+
+float Model::GetZA()
+{
+	return m_zA;
+}
+
+float Model::GetScale()
+{
+	return m_scale;
+}
+
+float Model::GetBoundingSphereRadius()
+{
+	return m_BSC_radius * m_scale;
+}
+#pragma endregion
+
+Model::~Model()
+{
+	delete m_pObject;
+	ObjectName = nullptr;
+	TextureName = nullptr;
+}

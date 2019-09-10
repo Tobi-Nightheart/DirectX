@@ -35,7 +35,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> m_pRaster;
 	
 	Microsoft::WRL::ComPtr<ID3D11VertexShader> m_pVShaderDepth;
-	//Microsoft::WRL::ComPtr<ID3D11InputLayout> m_pIADepth;
+	//Microsoft::WRL::ComPtr<ID3D11InputLayout> m_pIADepth; #remove in next version
 
 	//Constant Buffers
 	Microsoft::WRL::ComPtr<ID3D11Buffer> m_pModelCB;
@@ -66,25 +66,26 @@ public:
 	void DepthPass(DirectX::XMMATRIX& world, DirectX::XMMATRIX& view, DirectX::XMMATRIX& projection);
 
 	
-	bool CheckCollision(Model* model);
+	bool CheckCollision(Model* model); // #remove in next version
 	ObjFileModel* GetObject();
 	//Faces the model towards a point on the XZ-Plane
-	void LookAt(float x, float z);
-	void MoveForward(float d);
+	void LookAt(float x, float z); // #remove in next version
+	void MoveForward(float d); // #remove in next version
 
 #pragma region GetterSetterIncrementerMethods
 	void SetTexture(ID3D11ShaderResourceView* tex);
 	void SetSampler(ID3D11SamplerState* sampler);
 	void SetDeviceAndContext(ID3D11Device* Device, ID3D11DeviceContext* Context);
-	void ChangePos(DirectX::XMVECTOR delta);
+	//change to a point set point to true, else it adds the vector to position
+	void ChangePos(DirectX::XMVECTOR point, bool isPoint);
 	void IncXA(float a);
 	void IncYA(float a);
 	void IncZA(float a);
 	void IncScale(float v);
 	void SetPosition(DirectX::XMVECTOR newPos);
-	void SetXA(float x);
-	void SetYA(float y);
-	void SetZA(float z);
+	void SetXA(float a);
+	void SetYA(float a);
+	void SetZA(float a);
 	void SetScale(float s);
 	DirectX::XMVECTOR GetPosition();
 	float GetXA();
@@ -92,8 +93,8 @@ public:
 	float GetZA();
 	float GetScale();
 	float GetBoundingSphereRadius();
-	DirectX::XMMATRIX GetWorld(); ///CHANGE??
-	DirectX::XMVECTOR GetBoundingSpherePosition();
+	DirectX::XMMATRIX GetWorld();
+	DirectX::XMVECTOR GetBoundingSphereWSPosition();
 #pragma endregion
 	
 };

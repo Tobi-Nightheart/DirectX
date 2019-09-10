@@ -144,10 +144,12 @@
     <ClCompile Include="src\Model.cpp" />
     <ClCompile Include="src\ObjFileModel.cpp" />
     <ClCompile Include="src\pcH.cpp" />
+    <ClCompile Include="src\SceneManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\GameTimer.h" />
+    <ClInclude Include="src\SceneManager.h" />
     <ClInclude Include="src\Model.h" />
     <ClInclude Include="src\ObjFileModel.h" />
     <ClInclude Include="src\pcH.h" />
@@ -159,6 +161,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
+    <FxCompile Include="Shader\RainSimulationCS.hlsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

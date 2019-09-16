@@ -84,16 +84,15 @@ float4 PShader(vOut input)
     float3 normal = normalize(input.normal);
     
     Material mat;
-    mat.cDiffuse = float4(0.9f, 0.9f, 0.9f, 1.0f);
+    mat.cDiffuse = texture0.Sample(sampler0, input.texcoord);
+    //conversion to linear color space
+    mat.cDiffuse = mat.cDiffuse.rgb * mat.cDiffuse.rgb, mat.cDiffuse.a;
+
     mat.normal = normal;
     mat.specExp = 1.4f;
     mat.specIntensity = 1.6f;
 
-    float4 color = texture0.Sample(sampler0, input.texcoord);
-    //conversion to linear space
-    color = color.rgb * color.rgb, color.a;
-
-    float4 finalColor = float4(CalcAmbient(normal, (float3) color), 1.0f);
+    float4 finalColor = float4(CalcAmbient(normal, mat.cDiffuse.rgb), 1.0f);
 
     finalColor.rgb += CalcDirectional(input.position, mat);
 

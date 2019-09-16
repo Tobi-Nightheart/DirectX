@@ -61,9 +61,9 @@ Model::Model(ID3D11Device* device, ID3D11DeviceContext* context, char* ObjName, 
 }
 
 
-HRESULT Model::LoadObjModel(char* filename)
+HRESULT Model::LoadObjModel()
 {
-	m_pObject = new ObjFileModel(filename, m_pDevice.Get(), m_pContext.Get());
+	m_pObject = new ObjFileModel(ObjectName, m_pDevice.Get(), m_pContext.Get());
 	if (m_pObject->filename == "FILE NOT LOADED") return S_FALSE;
 
 	HRESULT hr = S_OK;
@@ -316,10 +316,7 @@ void Model::IncZA(float a)
 	m_zA += a;
 }
 
-void Model::IncScale(float num)
-{
-	m_scale += num;
-}
+
 
 void Model::SetXA(float a)
 {
@@ -336,10 +333,6 @@ void Model::SetZA(float a)
 	m_zA = a;
 }
 
-void Model::SetScale(float scale)
-{
-	m_scale = scale;
-}
 
 DirectX::XMVECTOR Model::GetPosition()
 {
@@ -366,10 +359,21 @@ float Model::GetScale()
 	return m_scale;
 }
 
+void Model::IncScale(float num)
+{
+	m_scale += num;
+}
+
+void Model::SetScale(float scale)
+{
+	m_scale = scale;
+}
+
 float Model::GetBoundingSphereRadius()
 {
 	return m_BSC_radius * m_scale;
 }
+
 #pragma endregion
 
 Model::~Model()

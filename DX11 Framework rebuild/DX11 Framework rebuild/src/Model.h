@@ -10,6 +10,12 @@ private:
 		DirectX::XMMATRIX World;
 	};
 
+	struct REFLECTIVE_CB
+	{
+		DirectX::XMMATRIX WVP;
+		DirectX::XMMATRIX WorldView;
+	};
+
 	struct LIGHT_CB
 	{
 		DirectX::XMFLOAT3 EyePos;
@@ -61,7 +67,7 @@ public:
 	Model();
 	Model(ID3D11Device* device, ID3D11DeviceContext* context, char* ObjName, char* TexName, bool Reflective);
 	~Model();
-	HRESULT LoadObjModel(char* filename);
+	HRESULT LoadObjModel();
 	void Draw(DirectX::XMMATRIX& world, DirectX::XMMATRIX& view, DirectX::XMMATRIX& projection, DirectX::XMFLOAT4& AmbColor, DirectX::XMFLOAT3& DirVector, DirectX::XMFLOAT4& DirC);
 	void DepthPass(DirectX::XMMATRIX& world, DirectX::XMMATRIX& view, DirectX::XMMATRIX& projection);
 
@@ -78,23 +84,29 @@ public:
 	void SetDeviceAndContext(ID3D11Device* Device, ID3D11DeviceContext* Context);
 	//change to a point set point to true, else it adds the vector to position
 	void ChangePos(DirectX::XMVECTOR point, bool isPoint);
-	void IncXA(float a);
-	void IncYA(float a);
-	void IncZA(float a);
-	void IncScale(float v);
+	void SetPosition(float x, float y, float z);
 	void SetPosition(DirectX::XMVECTOR newPos);
-	void SetXA(float a);
-	void SetYA(float a);
-	void SetZA(float a);
-	void SetScale(float s);
 	DirectX::XMVECTOR GetPosition();
+	DirectX::XMFLOAT3 GetPosition3f();
+	
 	float GetXA();
+	void IncXA(float a);
+	void SetXA(float a);
 	float GetYA();
+	void IncYA(float a);
+	void SetYA(float a);
 	float GetZA();
+	void IncZA(float a);
+	void SetZA(float a);
+	
 	float GetScale();
+	void IncScale(float v);
+	void SetScale(float s);
+
 	float GetBoundingSphereRadius();
 	DirectX::XMMATRIX GetWorld();
 	DirectX::XMVECTOR GetBoundingSphereWSPosition();
+	DirectX::XMFLOAT3 GetBoundingSphereWSPosition3f();
 #pragma endregion
 	
 };

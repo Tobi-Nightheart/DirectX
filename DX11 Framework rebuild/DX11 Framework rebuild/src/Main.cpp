@@ -2,6 +2,7 @@
 
 #include "pcH.h"
 #include "GameTimer.h"
+#include "SceneManager.h"
 #include <string>
 
 //Globals
@@ -15,7 +16,7 @@ Microsoft::WRL::ComPtr<IDXGISwapChain> g_pSwapChain = nullptr;
 Microsoft::WRL::ComPtr<ID3D11RenderTargetView> g_pRTView = nullptr;
 Microsoft::WRL::ComPtr<ID3D11DepthStencilView> g_pZBuffer = nullptr;
 
-//SceneManager* g_pSceneManager = nullptr; //for scenemanager scan comments to implement scenemanager
+SceneManager* g_pSceneManager = nullptr;
 
 GameTimer g_GameTimer;
 
@@ -336,14 +337,14 @@ HRESULT InitializeGraphics()
 	viewport.Height = (FLOAT)height;
 	viewport.MinDepth = 0.0f;
 	viewport.MaxDepth = 1.0f;
-	//g_pSceneManager = new Scenemanger(g_pRTV, &viewport, g_pZBuffer, &g_pGameTimer);
-	//hr = g_pSceneManager->Initialize(g_pDevice, g_pContext, g_pInput);
+	g_pSceneManager = new SceneManager(g_pDevice.Get(), g_pContext.Get(), &g_GameTimer);
+	hr = g_pSceneManager->Initialize();
 	if (FAILED(hr)) return hr;
 	
 	return S_OK;
 }
 
-void RenderFrame(void) 
+void Render(void) 
 {
 	float rgba_clear_color[4] = { 0.1f, 0.2f, 0.6f, 1.0f };
 	g_pContext->ClearRenderTargetView(g_pRTView.Get(), rgba_clear_color);
@@ -362,7 +363,7 @@ void RenderFrame(void)
 	viewport.MaxDepth = 1.0f;
 
 	//g_pSceneManager->SetViewPort(&viewport);
-	//g_pSceneManager->Render(&g_pGameTimer, sfps);
+	g_pSceneManager->Render();
 
 	g_pSwapChain->Present(0, 0);
 }
@@ -407,17 +408,17 @@ void ReportLiveObjects()
 
 void ShutdownD3D()
 {
-	/*if(g_pInput)
-	{
-		delete g_pInput;
-		g_pInput = nullptr;
-	}
+	
 	if(g_pSceneManager)
 	{
 		delete g_pSceneManager;
 		g_pSceneManager = nullptr;
 	}
-	
+	/*if(g_pInput)
+	{
+		delete g_pInput;
+		g_pInput = nullptr;
+	}
 	SAFE_RELEASE(g_pCB0);
 	SAFE_RELEASE(g_pVertexBuffer);
 	SAFE_RELEASE(g_pVShader);

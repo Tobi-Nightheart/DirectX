@@ -89,7 +89,7 @@ float Camera::GetFovY()const
 float Camera::GetFovX()const
 {
 	float halfWidth = 0.5f * GetNearWindowWidth();
-	return 2.0f * atan(halfWidth / mNearZ);
+	return  2.0f * (float)atan(halfWidth / mNearZ);
 }
 
 float Camera::GetNearWindowHeight()const
@@ -179,7 +179,7 @@ void Camera::Strafe(float d)
 	XMVECTOR r = XMLoadFloat3(&mRight);
 	XMVECTOR p = XMLoadFloat3(&mPosition);
 
-	XMStoreFloat3(&mPosition, XMVectorMultiply(s, r, p));
+	XMStoreFloat3(&mPosition, XMVectorMultiplyAdd(s, r, p));
 
 	mViewDirty = true;
 }
@@ -189,7 +189,7 @@ void Camera::Walk(float d)
 	XMVECTOR s = XMVectorReplicate(d);
 	XMVECTOR l = XMLoadFloat3(&mLook);
 	XMVECTOR p = XMLoadFloat3(&mPosition);
-	XMStoreFloat3(&mPosition, XMVectorMultiply(s, l, p));
+	XMStoreFloat3(&mPosition, XMVectorMultiplyAdd(s, l, p));
 
 	mViewDirty = true;
 }

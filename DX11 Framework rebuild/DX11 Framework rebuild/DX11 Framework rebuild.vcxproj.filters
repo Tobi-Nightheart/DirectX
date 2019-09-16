@@ -64,6 +64,11 @@
     <FxCompile Include="Shader\model.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
-    <FxCompile Include="Shader\RainSimulationCS.hlsl" />
+    <FxCompile Include="Shader\RainSimulationCS.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\reflect_shader.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

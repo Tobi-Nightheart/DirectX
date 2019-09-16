@@ -88,7 +88,7 @@ HRESULT Model::LoadObjModel()
 			return hr;
 	}
 
-	hr = D3DCompileFromFile(L"Shader/opaque.hlsl", NULL, NULL, NULL, "vs_5_0", 0, 0, &opaque, &error);
+	hr = D3DCompileFromFile(L"Shader/opaque.hlsl", NULL, NULL, "OpaqueVS", "vs_5_0", 0, 0, &opaque, &error);
 	if (error != 0)
 	{
 		OutputDebugStringA((char*)error->GetBufferPointer());

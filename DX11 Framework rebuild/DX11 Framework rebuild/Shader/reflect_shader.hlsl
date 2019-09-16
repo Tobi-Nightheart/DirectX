@@ -30,7 +30,7 @@ struct Material
 
 struct VOut
 {
-    float3 position : SV_POSITION;
+    float4 position : SV_POSITION;
     float3 texcoord : TEXCOORD;
     float3 normal : NORMAL;
 };
@@ -59,7 +59,7 @@ float3 CalcDirectional(float3 pos, Material mat)
 VOut ReflectVS(float3 position : POSITION, float2 texcoord : TEXCOORD, float3 normal : NORMAL)
 {
     VOut output;
-    output.position = (float3) mul(WVP, float4(position, 1.0f));
+    output.position = mul(WVP, float4(position, 1.0f));
     //calculate pos in WorldView-Space
     float3 wvPos = (float3) mul(WV, float4(position, 1.0f));
     //surface normal in WorldView-Space
@@ -73,12 +73,12 @@ VOut ReflectVS(float3 position : POSITION, float2 texcoord : TEXCOORD, float3 no
     return output;
 }
 
-float4 ReflectPS(float3 position : SV_POSITION, float3 texcoord : TEXCOORD, float3 normal : NORMAL)
+float4 ReflectPS(float4 position : SV_POSITION, float3 texcoord : TEXCOORD, float3 normal : NORMAL) : SV_TARGET
 {
     Material matt;
     matt.cDiffuse = cube0.Sample(sampler0, texcoord);
     //conversion to  linear space
-    matt.cDiffuse = matt.cDiffuse.rgb * matt.cDiffuse.rgb, matt.cDiffuse.a;
+    matt.cDiffuse = float4(matt.cDiffuse.rgb * matt.cDiffuse.rgb, matt.cDiffuse.a);
 
     matt.normal = normalize(normal);
     matt.specExp = 1.0f;
@@ -87,7 +87,7 @@ float4 ReflectPS(float3 position : SV_POSITION, float3 texcoord : TEXCOORD, floa
     float3 normalized = normalize(normal);
     
     float4 finalColor = CalcAmbient(normal, matt.cDiffuse.rgb);
-    finalColor += CalcDirectional(position, matt);
+    finalColor += CalcDirectional(position.xyz, matt);
     
     return finalColor;
 }

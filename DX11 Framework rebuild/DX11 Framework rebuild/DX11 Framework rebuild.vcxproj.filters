@@ -70,5 +70,6 @@
     <FxCompile Include="Shader\reflect_shader.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
+    <FxCompile Include="Shader\opaque.hlsl" />
   </ItemGroup>
 </Project>

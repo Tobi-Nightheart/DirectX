@@ -29,7 +29,7 @@ struct vIn
 
 struct vOut
 {
-    float3 position : SV_POSITION;
+    float4 position : SV_POSITION;
     float2 texcoord : TEXCOORD;
     float3 normal : NORMAL;
 };
@@ -72,21 +72,21 @@ vOut VShader(vIn input)
 {
     vOut output;
     //mental note this might need to be changed
-    output.position = mul((float3x3) mWVP, input.position);
+    output.position = mul(mWVP, float4(input.position, 1.0f));
     output.texcoord = input.texcoord;
-    output.normal = mul((float3x3) mWorld, input.normal);
+    output.normal = (float3) mul(mWorld, float4(input.normal, 1.0f));
 
     return output;
 }
 
-float4 PShader(vOut input)
+float4 PShader(vOut input) : SV_TARGET
 {
     float3 normal = normalize(input.normal);
     
     Material mat;
     mat.cDiffuse = texture0.Sample(sampler0, input.texcoord);
     //conversion to linear color space
-    mat.cDiffuse = mat.cDiffuse.rgb * mat.cDiffuse.rgb, mat.cDiffuse.a;
+    mat.cDiffuse = float4(mat.cDiffuse.rgb * mat.cDiffuse.rgb, mat.cDiffuse.a);
 
     mat.normal = normal;
     mat.specExp = 1.4f;
@@ -94,7 +94,7 @@ float4 PShader(vOut input)
 
     float4 finalColor = float4(CalcAmbient(normal, mat.cDiffuse.rgb), 1.0f);
 
-    finalColor.rgb += CalcDirectional(input.position, mat);
+    finalColor.rgb += CalcDirectional(input.position.xyz, mat);
 
     return finalColor;
 }

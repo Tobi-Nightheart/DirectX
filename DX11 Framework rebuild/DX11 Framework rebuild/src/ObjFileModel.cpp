@@ -108,7 +108,7 @@ void ObjFileModel::parsefile()
 
 			if (!success) { MessageBox(nullptr, L"ERROR: badly formatted normal!", L"FILE ERROR", MB_OK); }
 
-			position_list.push_back(tempxyz);
+			normal_list.push_back(tempxyz);
 		}
 		else if (strncmp(&fbuffer[tokenstart], "f ", 2) == 0)
 		{
@@ -234,4 +234,8 @@ bool ObjFileModel::createVB()
 ObjFileModel::~ObjFileModel()
 {
 	delete[] vertices;
+
+	position_list.clear();
+	texcoord_list.clear();
+	normal_list.clear();
 }

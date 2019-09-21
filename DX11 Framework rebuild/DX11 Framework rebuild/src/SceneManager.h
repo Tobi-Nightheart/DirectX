@@ -19,7 +19,7 @@ private:
 	//Input
 
 	//camera
-	Camera* sc_pCamera;
+	Camera sc_Camera;
 
 	GameTimer* sc_pGT;
 

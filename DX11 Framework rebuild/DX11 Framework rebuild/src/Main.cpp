@@ -277,6 +277,10 @@ HRESULT InitializeD3D()
 	if (FAILED(hr))
 		return hr;
 
+	hr = g_pDevice->CreateRenderTargetView(pBackBuffer, nullptr, &g_pRTView);
+	if (FAILED(hr))
+		return hr;
+
 	D3D11_TEXTURE2D_DESC tex2dDesc;
 	ZeroMemory(&tex2dDesc, sizeof(D3D11_TEXTURE2D_DESC));
 
@@ -306,7 +310,7 @@ HRESULT InitializeD3D()
 
 	SAFE_RELEASE(pZBufferTex);
 
-	g_pContext->OMSetRenderTargets(1, &g_pRTView, g_pZBuffer.Get());
+	g_pContext->OMSetRenderTargets(1, g_pRTView.GetAddressOf(), g_pZBuffer.Get());
 
 	D3D11_VIEWPORT viewport;
 	viewport.TopLeftX = 0.0f;
@@ -346,6 +350,7 @@ HRESULT InitializeGraphics()
 
 void Render(void) 
 {
+
 	float rgba_clear_color[4] = { 0.1f, 0.2f, 0.6f, 1.0f };
 	g_pContext->ClearRenderTargetView(g_pRTView.Get(), rgba_clear_color);
 	g_pContext->ClearDepthStencilView(g_pZBuffer.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, (UINT) 0.0f);

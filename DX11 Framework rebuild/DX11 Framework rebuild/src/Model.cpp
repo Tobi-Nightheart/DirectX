@@ -169,7 +169,7 @@ void Model::Draw(XMMATRIX& world, XMMATRIX& view, XMMATRIX& projection, XMFLOAT4
 	modelCBValues.World = world;
 	modelCBValues.WVP = world * view * projection;
 	m_pContext->UpdateSubresource(m_pModelCB.Get(), 0, 0, &modelCBValues, 0, 0);
-	m_pContext->VSSetConstantBuffers(0, 1, &m_pModelCB);
+	m_pContext->VSSetConstantBuffers(0, 1, m_pModelCB.GetAddressOf());
 	
 	LIGHT_CB lightCBValues;
 	lightCBValues.EyePos = XMFLOAT3(0.0f, 0.0f, 0.0f);
@@ -178,7 +178,7 @@ void Model::Draw(XMMATRIX& world, XMMATRIX& view, XMMATRIX& projection, XMFLOAT4
 	lightCBValues.Ambientdown = AmbColor;
 	lightCBValues.AmbientRange = XMFLOAT4(0.2f, 0.2f, 0.2f, 0.2f);
 	m_pContext->UpdateSubresource(m_pLightCB.Get(), 0, 0, &lightCBValues, 0, 0);
-	m_pContext->PSSetConstantBuffers(1, 1, &m_pLightCB);
+	m_pContext->PSSetConstantBuffers(1, 1, m_pLightCB.GetAddressOf());
 
 	m_pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	m_pContext->IASetInputLayout(m_pInputLayout.Get());

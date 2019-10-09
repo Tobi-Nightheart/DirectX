@@ -413,6 +413,8 @@ void ReportLiveObjects()
 
 void ShutdownD3D()
 {
+	g_pContext->ClearState();
+	g_pContext->Flush();
 	
 	if(g_pSceneManager)
 	{

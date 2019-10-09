@@ -156,6 +156,9 @@ HRESULT Model::LoadObjModel()
 	hr = m_pDevice->CreateRasterizerState(&rasterDesc, &m_pRaster);
 	if (FAILED(hr)) return hr;
 
+	//create texture
+
+
 	CalculateModelCenterPoint();
 	CalculateBoundingSphereRadius();
 
@@ -185,6 +188,7 @@ void Model::Draw(XMMATRIX& world, XMMATRIX& view, XMMATRIX& projection, XMFLOAT4
 	m_pContext->VSSetShader(m_pVShader.Get(), nullptr, 0);
 	m_pContext->RSSetState(m_pRaster.Get());
 	m_pContext->PSSetShader(m_pPShader.Get(), nullptr, 0);
+	m_pContext->PSSetShaderResources(0, 1, m_pTexture0.GetAddressOf());
 	m_pContext->PSSetSamplers(0, 1, m_pSampler0.GetAddressOf());
 
 	m_pObject->Draw();

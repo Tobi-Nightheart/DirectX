@@ -145,6 +145,7 @@
     <ClCompile Include="src\ObjFileModel.cpp" />
     <ClCompile Include="src\pcH.cpp" />
     <ClCompile Include="src\SceneManager.cpp" />
+    <ClCompile Include="src\WICTextureLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Camera.h" />
@@ -153,6 +154,7 @@
     <ClInclude Include="src\Model.h" />
     <ClInclude Include="src\ObjFileModel.h" />
     <ClInclude Include="src\pcH.h" />
+    <ClInclude Include="src\WICTextureLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\model.hlsl">

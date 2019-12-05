@@ -1,3 +1,5 @@
+//Copyright by Microsoft
+
 #include <dxgiformat.h>
 #include <assert.h>
 

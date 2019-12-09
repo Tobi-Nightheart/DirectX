@@ -1,6 +1,8 @@
 #pragma once
 #include "pcH.h"
 #include "Model.h"
+#include <wincodec.h>
+#include "WICTextureLoader.h"
 
 using namespace DirectX;
 
@@ -157,7 +159,12 @@ HRESULT Model::LoadObjModel()
 	if (FAILED(hr)) return hr;
 
 	//create texture
-
+	size_t newsize = strlen(TextureName) + 1;
+	wchar_t* wc = new wchar_t[newsize];
+	size_t convertedChars = 0;
+	mbstowcs_s(&convertedChars, wc, newsize, TextureName, _TRUNCATE);
+	hr = CreateWICTextureFromFile(m_pDevice.Get(), m_pContext.Get(), wc, nullptr, &m_pTexture0);
+	if (FAILED(hr)) return hr;
 
 	CalculateModelCenterPoint();
 	CalculateBoundingSphereRadius();

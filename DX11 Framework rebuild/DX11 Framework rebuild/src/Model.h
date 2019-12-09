@@ -43,6 +43,8 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11VertexShader> m_pVShaderDepth;
 	//Microsoft::WRL::ComPtr<ID3D11InputLayout> m_pIADepth; #remove in next version
 
+	//Microsoft::WRL::ComPtr<CLSID_WICImagingFactory> m_pImagingFactory;
+
 	//Constant Buffers
 	Microsoft::WRL::ComPtr<ID3D11Buffer> m_pModelCB;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> m_pLightCB;

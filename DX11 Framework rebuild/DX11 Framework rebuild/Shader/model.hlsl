@@ -17,7 +17,7 @@ cbuffer Light : register(b1)
     float pack4 : packoffset(c4.w);
 };
 
-Texture2D texture0 : register(t1);
+Texture2D texture0 : register(t0);
 SamplerState sampler0 : register(s0);
 
 struct vIn

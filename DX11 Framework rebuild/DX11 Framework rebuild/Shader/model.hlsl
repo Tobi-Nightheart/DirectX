@@ -72,6 +72,7 @@ vOut VShader(vIn input)
 {
     vOut output;
     //mental note this might need to be changed
+    
     output.position = mul(mWVP, float4(input.position, 1.0f));
     output.texcoord = input.texcoord;
     output.normal = (float3) mul(mWorld, float4(input.normal, 1.0f));
@@ -96,5 +97,7 @@ float4 PShader(vOut input) : SV_TARGET
 
     finalColor.rgb += CalcDirectional(input.position.xyz, mat);
 
+    finalColor = texture0.Sample(sampler0, input.texcoord+pack1);
+    
     return finalColor;
 }

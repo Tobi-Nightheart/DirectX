@@ -188,7 +188,9 @@ void Model::Draw(XMMATRIX& world, XMMATRIX& view, XMMATRIX& projection, XMFLOAT4
 	m_pContext->UpdateSubresource(m_pModelCB.Get(), 0, 0, &modelCBValues, 0, 0);
 	m_pContext->VSSetConstantBuffers(0, 1, m_pModelCB.GetAddressOf());
 	
+	t += .000005;
 	LIGHT_CB lightCBValues;
+	lightCBValues.pack1 = t;
 	lightCBValues.EyePos = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	lightCBValues.DirToLight = DirVector;
 	lightCBValues.DirLightColor = DirColor;
@@ -333,8 +335,6 @@ void Model::IncZA(float a)
 {
 	m_zA += a;
 }
-
-
 
 void Model::SetXA(float a)
 {

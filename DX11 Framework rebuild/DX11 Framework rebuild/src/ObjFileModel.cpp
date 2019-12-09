@@ -185,11 +185,11 @@ bool ObjFileModel::getnextline()
 
 bool ObjFileModel::createVB()
 {
-	numVerts = (unsigned int) pindices.size();
+	numVerts = (unsigned int)pindices.size();
 
 	vertices = new MODEL_POS_TEX_NORM_VERTEX[numVerts];
 
-	for (unsigned int i = 0; i < numVerts; i++) 
+	for (unsigned int i = 0; i < numVerts; i++)
 	{
 		int vindex = pindices[i] - 1;
 
@@ -210,8 +210,8 @@ bool ObjFileModel::createVB()
 			vertices[i].Normal.x = normal_list[nindex].x;
 			vertices[i].Normal.y = normal_list[nindex].y;
 			vertices[i].Normal.z = normal_list[nindex].z;
-		}				  
-	}					  
+		}
+	}
 
 	D3D11_BUFFER_DESC bufferDesc;
 	ZeroMemory(&bufferDesc, sizeof(D3D11_BUFFER_DESC));

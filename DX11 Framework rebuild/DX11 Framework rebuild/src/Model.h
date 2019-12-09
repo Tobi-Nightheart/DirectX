@@ -4,6 +4,7 @@
 class Model
 {
 private:
+	float t;
 	struct MODEL_CB
 	{
 		DirectX::XMMATRIX WVP;

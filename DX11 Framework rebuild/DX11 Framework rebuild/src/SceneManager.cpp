@@ -28,7 +28,7 @@ HRESULT SceneManager::Initialize()
 	hr = sc_pPlane->LoadObjModel();
 	if (FAILED(hr)) return hr;
 	
-	sc_pObject = new Model(sc_pDevice.Get(), sc_pContext.Get(), (char*)"Resources/cube.obj", (char*)"assets/texture1.jpg", false);
+	sc_pObject = new Model(sc_pDevice.Get(), sc_pContext.Get(), (char*)"Resources/sphere.obj", (char*)"assets/texture1.jpg", false);
 	hr = sc_pObject->LoadObjModel();
 	if (FAILED(hr)) return hr;
 	sc_pObject->SetPosition(0, 1, 0);

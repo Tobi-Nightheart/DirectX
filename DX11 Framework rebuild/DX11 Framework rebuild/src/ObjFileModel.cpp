@@ -37,7 +37,7 @@ int ObjFileModel::loadfile(char* fname)
 	pFile = fopen(fname, "r");
 	if (pFile == nullptr) { MessageBox(nullptr, L"Failed to open model file!", L"FILE FAILURE", MB_OK); return 0; }
 
-	//get filesize
+	//get file size
 	fseek(pFile, 0, SEEK_END);
 	fbuffersize = ftell(pFile);
 	rewind(pFile);
@@ -47,7 +47,7 @@ int ObjFileModel::loadfile(char* fname)
 	if (fbuffer == nullptr) { fclose(pFile); MessageBox(nullptr, L"Failed to allocate memory for model file!", L"FILE FAILURE", MB_OK); return 0; }
 
 	actualsize = fread(fbuffer, 1, fbuffersize, pFile);
-	if (actualsize == 0) { fclose(pFile); MessageBox(nullptr, L"Failed to  read model file!", L"FILEFAILURE", MB_OK); return 0; }
+	if (actualsize == 0) { fclose(pFile); MessageBox(nullptr, L"Failed to  read model file!", L"FILE FAILURE", MB_OK); return 0; }
 
 	fbuffer[actualsize] = '\n';
 	fclose(pFile);
@@ -125,10 +125,10 @@ void ObjFileModel::parsefile()
 				}
 				tempptr++;
 			}
-			
+
 			success = true;
 
-			for (int i = 1; i < 3; i++)
+			for (int i = 0; i < 3; i++)
 			{
 				success = success && getnexttoken(tokenstart, tokenlength);
 				pindices.push_back(atoi(&fbuffer[tokenstart]));
@@ -148,7 +148,7 @@ void ObjFileModel::parsefile()
 
 			if (!success) {MessageBox(nullptr, L"ERROR: badly formatted face!", L"FILE ERROR", MB_OK); }
 		}
-	} while (getnextline());
+	} while (getnextline()==true);
 }
 
 bool ObjFileModel::getnexttoken(int& tokenstart, int& tokenlength)
@@ -157,13 +157,13 @@ bool ObjFileModel::getnexttoken(int& tokenstart, int& tokenlength)
 	tokenlength = 1;
 	int tokenend;
 
-	while (fbuffer[tokenptr] == ' ' || fbuffer[tokenptr] == '\t' || fbuffer[tokenptr] == '/')tokenptr++;
+	while (fbuffer[tokenptr] == ' ' || fbuffer[tokenptr] == '\t' || fbuffer[tokenptr] == '/') tokenptr++;
 
 	if (fbuffer[tokenptr] == '\n') return false;
 
 	tokenend = tokenptr + 1;
 
-	while (fbuffer[tokenend] != ' ' && fbuffer[tokenend] != '\n' && fbuffer[tokenend] != '/') tokenend++;
+	while (fbuffer[tokenend] != ' ' && fbuffer[tokenend] != '\t' && fbuffer[tokenend] != '\n' && fbuffer[tokenend] != '/') tokenend++;
 
 	tokenlength = tokenend - tokenptr;
 	tokenstart = tokenptr;
@@ -181,6 +181,7 @@ bool ObjFileModel::getnextline()
 	if (tokenptr >= actualsize) return false;
 	else return true;
 }
+
 
 bool ObjFileModel::createVB()
 {

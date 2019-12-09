@@ -21,15 +21,17 @@ HRESULT SceneManager::Initialize()
 {
 	HRESULT hr = S_OK;
 
-	sc_Camera.SetPosition(XMFLOAT3(0.0f, 0.0f, -5.0f));
+	sc_Camera.SetPosition(XMFLOAT3(0.0f, 10.0f, -25.0f));
+	sc_Camera.LookAt(sc_Camera.GetPosition(), XMVectorSet(0, 0, 0, 1), XMVectorSet(0,1,0,0));
 
 	sc_pPlane = new Model(sc_pDevice.Get(), sc_pContext.Get(), (char*)"Resources/plane.obj", (char*)"assets/texture3.jpg", false);
 	hr = sc_pPlane->LoadObjModel();
 	if (FAILED(hr)) return hr;
-
+	
 	sc_pObject = new Model(sc_pDevice.Get(), sc_pContext.Get(), (char*)"Resources/cube.obj", (char*)"assets/texture1.jpg", false);
 	hr = sc_pObject->LoadObjModel();
 	if (FAILED(hr)) return hr;
+	sc_pObject->SetPosition(0, 1, 0);
 
 
 	return S_OK;
@@ -39,7 +41,7 @@ void SceneManager::Render()
 {
 	sc_Camera.UpdateViewMatrix();
 
-	XMMATRIX world, view, proj;
+	XMMATRIX world, view, proj, translate;
 	world = XMMatrixIdentity();
 	view = sc_Camera.GetView();
 	proj = sc_Camera.GetProj();

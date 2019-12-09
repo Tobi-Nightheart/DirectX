@@ -174,8 +174,15 @@ HRESULT Model::LoadObjModel()
 
 void Model::Draw(XMMATRIX& world, XMMATRIX& view, XMMATRIX& projection, XMFLOAT4& AmbColor, XMFLOAT3& DirVector, XMFLOAT4& DirColor)
 {
+	XMFLOAT3 pos =  this->GetPosition3f();
 	//Update constant buffers
 	MODEL_CB modelCBValues;
+	world = XMMatrixRotationX(XMConvertToRadians(m_xA));
+	world *= XMMatrixRotationY(XMConvertToRadians(m_yA));
+	world *= XMMatrixRotationZ(XMConvertToRadians(m_zA));
+	world *= XMMatrixScaling(m_scale, m_scale, m_scale);
+	world *= XMMatrixTranslation(pos.x, pos.y, pos.z);
+
 	modelCBValues.World = world;
 	modelCBValues.WVP = world * view * projection;
 	m_pContext->UpdateSubresource(m_pModelCB.Get(), 0, 0, &modelCBValues, 0, 0);
@@ -190,7 +197,7 @@ void Model::Draw(XMMATRIX& world, XMMATRIX& view, XMMATRIX& projection, XMFLOAT4
 	m_pContext->UpdateSubresource(m_pLightCB.Get(), 0, 0, &lightCBValues, 0, 0);
 	m_pContext->PSSetConstantBuffers(1, 1, m_pLightCB.GetAddressOf());
 
-	m_pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	m_pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 	m_pContext->IASetInputLayout(m_pInputLayout.Get());
 	m_pContext->VSSetShader(m_pVShader.Get(), nullptr, 0);
 	m_pContext->RSSetState(m_pRaster.Get());
@@ -345,10 +352,23 @@ void Model::SetZA(float a)
 }
 
 
+void Model::SetPosition(float x, float y, float z)
+{
+	m_Position = XMVectorSet(x, y, z, 0);
+}
+
 DirectX::XMVECTOR Model::GetPosition()
 {
 	return m_Position;
 }
+
+DirectX::XMFLOAT3 Model::GetPosition3f() 
+{
+	DirectX::XMFLOAT3 pos;
+	DirectX::XMStoreFloat3(&pos, m_Position);
+	return pos;
+}
+
 
 float Model::GetXA()
 {

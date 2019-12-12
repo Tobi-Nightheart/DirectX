@@ -54,6 +54,7 @@ int ObjFileModel::loadfile(char* fname)
 	return 1;
 }
 
+
 void ObjFileModel::parsefile()
 {
 	tokenptr = 0;
@@ -93,7 +94,6 @@ void ObjFileModel::parsefile()
 			tempxy.y = (float)atof(&fbuffer[tokenstart]);
 
 			if (!success) { MessageBox(nullptr, L"ERROR: badly formatted Texcoord!", L"FILE ERROR", MB_OK); }
-
 			texcoord_list.push_back(tempxy);
 		}
 		else if (strncmp(&fbuffer[tokenstart], "vn", 2) == 0)
@@ -107,7 +107,6 @@ void ObjFileModel::parsefile()
 			tempxyz.z = (float)atof(&fbuffer[tokenstart]);
 
 			if (!success) { MessageBox(nullptr, L"ERROR: badly formatted normal!", L"FILE ERROR", MB_OK); }
-
 			normal_list.push_back(tempxyz);
 		}
 		else if (strncmp(&fbuffer[tokenstart], "f ", 2) == 0)

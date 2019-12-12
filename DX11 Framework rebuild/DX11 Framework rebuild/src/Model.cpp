@@ -199,7 +199,7 @@ void Model::Draw(XMMATRIX& world, XMMATRIX& view, XMMATRIX& projection, XMFLOAT4
 	m_pContext->UpdateSubresource(m_pLightCB.Get(), 0, 0, &lightCBValues, 0, 0);
 	m_pContext->PSSetConstantBuffers(1, 1, m_pLightCB.GetAddressOf());
 
-	m_pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+	m_pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	m_pContext->IASetInputLayout(m_pInputLayout.Get());
 	m_pContext->VSSetShader(m_pVShader.Get(), nullptr, 0);
 	m_pContext->RSSetState(m_pRaster.Get());

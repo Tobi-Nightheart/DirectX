@@ -71,7 +71,6 @@ float3 CalcDirectional(float3 pos, Material mat)
 vOut VShader(vIn input)
 {
     vOut output;
-    //mental note this might need to be changed
     
     output.position = mul(mWVP, float4(input.position, 1.0f));
     output.texcoord = input.texcoord;
@@ -94,10 +93,8 @@ float4 PShader(vOut input) : SV_TARGET
     mat.specIntensity = 1.6f;
 
     float4 finalColor = float4(CalcAmbient(normal, mat.cDiffuse.rgb), 1.0f);
-
+    // finalColor += float4(0, 0, 0, 1);
     finalColor.rgb += CalcDirectional(input.position.xyz, mat);
-
-    finalColor = texture0.Sample(sampler0, input.texcoord+pack1);
     
     return finalColor;
 }

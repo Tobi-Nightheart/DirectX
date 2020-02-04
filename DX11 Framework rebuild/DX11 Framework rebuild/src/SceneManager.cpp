@@ -46,8 +46,8 @@ void SceneManager::Render()
 	view = sc_Camera.GetView();
 	proj = sc_Camera.GetProj();
 
-	sc_pPlane->Draw(world, view, proj, cAmbLight, vDirLight, cDirLight);
-	sc_pObject->Draw(world, view, proj, cAmbLight, vDirLight, cDirLight);
+	sc_pPlane->Draw(world, view, proj, cAmbLight, vDirLight, cDirLight, sc_Camera);
+	sc_pObject->Draw(world, view, proj, cAmbLight, vDirLight, cDirLight, sc_Camera);
 
 }
 

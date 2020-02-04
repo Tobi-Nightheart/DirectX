@@ -39,6 +39,9 @@
     <ClInclude Include="src\WICTextureLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\RainCompute.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\pcH.cpp">
@@ -65,6 +68,9 @@
     <ClCompile Include="src\WICTextureLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\RainCompute.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\model.hlsl">
@@ -79,5 +85,6 @@
     <FxCompile Include="Shader\opaque.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
+    <FxCompile Include="Shader\RainShader.hlsl" />
   </ItemGroup>
 </Project>

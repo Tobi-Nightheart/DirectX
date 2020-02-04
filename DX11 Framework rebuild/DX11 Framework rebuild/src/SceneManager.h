@@ -21,7 +21,7 @@ private:
 	//camera
 	Camera sc_Camera;
 
-	GameTimer* sc_pGT;
+	std::shared_ptr<GameTimer> sc_pGT;
 
 public:
 	SceneManager(ID3D11Device* device, ID3D11DeviceContext* context, GameTimer* gt);

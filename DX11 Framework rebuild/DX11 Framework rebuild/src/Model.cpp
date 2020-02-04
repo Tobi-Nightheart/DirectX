@@ -3,6 +3,7 @@
 #include "Model.h"
 #include <wincodec.h>
 #include "WICTextureLoader.h"
+#include "Camera.h"
 
 using namespace DirectX;
 
@@ -172,7 +173,7 @@ HRESULT Model::LoadObjModel()
 	return hr;
 }
 
-void Model::Draw(XMMATRIX& world, XMMATRIX& view, XMMATRIX& projection, XMFLOAT4& AmbColor, XMFLOAT3& DirVector, XMFLOAT4& DirColor)
+void Model::Draw(XMMATRIX& world, XMMATRIX& view, XMMATRIX& projection, XMFLOAT4& AmbColor, XMFLOAT3& DirVector, XMFLOAT4& DirColor, Camera& cam)
 {
 	XMFLOAT3 pos =  this->GetPosition3f();
 	//Update constant buffers
@@ -187,11 +188,9 @@ void Model::Draw(XMMATRIX& world, XMMATRIX& view, XMMATRIX& projection, XMFLOAT4
 	modelCBValues.WVP = world * view * projection;
 	m_pContext->UpdateSubresource(m_pModelCB.Get(), 0, 0, &modelCBValues, 0, 0);
 	m_pContext->VSSetConstantBuffers(0, 1, m_pModelCB.GetAddressOf());
-	
-	t += .000005;
+
 	LIGHT_CB lightCBValues;
-	lightCBValues.pack1 = t;
-	lightCBValues.EyePos = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	lightCBValues.EyePos = cam.GetPosition3f();
 	lightCBValues.DirToLight = DirVector;
 	lightCBValues.DirLightColor = DirColor;
 	lightCBValues.Ambientdown = AmbColor;

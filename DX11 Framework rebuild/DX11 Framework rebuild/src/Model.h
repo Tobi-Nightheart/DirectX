@@ -4,7 +4,6 @@
 class Model
 {
 private:
-	float t;
 	struct MODEL_CB
 	{
 		DirectX::XMMATRIX WVP;
@@ -71,7 +70,7 @@ public:
 	Model(ID3D11Device* device, ID3D11DeviceContext* context, char* ObjName, char* TexName, bool Reflective);
 	~Model();
 	HRESULT LoadObjModel();
-	void Draw(DirectX::XMMATRIX& world, DirectX::XMMATRIX& view, DirectX::XMMATRIX& projection, DirectX::XMFLOAT4& AmbColor, DirectX::XMFLOAT3& DirVector, DirectX::XMFLOAT4& DirC);
+	void Draw(DirectX::XMMATRIX& world, DirectX::XMMATRIX& view, DirectX::XMMATRIX& projection, DirectX::XMFLOAT4& AmbColor, DirectX::XMFLOAT3& DirVector, DirectX::XMFLOAT4& DirC, class Camera& cam);
 	void DepthPass(DirectX::XMMATRIX& world, DirectX::XMMATRIX& view, DirectX::XMMATRIX& projection);
 
 	

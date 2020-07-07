@@ -12,9 +12,9 @@ SceneManager::SceneManager(ID3D11Device* device, ID3D11DeviceContext* context, G
 	sc_pObject = nullptr;
 	sc_pPlane = nullptr;
 
-	vDirLight = XMFLOAT3(5.0f, -7.0f, 3.0f);
-	cDirLight = XMFLOAT4(1.0f, 0.5f, 0.5f, 0.8f);
-	cAmbLight = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	vDirLight = XMFLOAT3(10.0f, 10.0f, 0.0f);
+	cDirLight = XMFLOAT4(0.45f, 0.5f, 0.45f, 0.1f);
+	cAmbLight = XMFLOAT4(0.1f, 0.1f, 0.1f, 0.1f);
 }
 
 HRESULT SceneManager::Initialize()
@@ -45,7 +45,7 @@ void SceneManager::Render()
 	world = XMMatrixIdentity();
 	view = sc_Camera.GetView();
 	proj = sc_Camera.GetProj();
-
+	sc_pObject->IncYA(0.01f);
 	sc_pPlane->Draw(world, view, proj, cAmbLight, vDirLight, cDirLight, sc_Camera);
 	sc_pObject->Draw(world, view, proj, cAmbLight, vDirLight, cDirLight, sc_Camera);
 

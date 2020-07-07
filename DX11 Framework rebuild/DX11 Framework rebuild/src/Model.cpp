@@ -212,7 +212,13 @@ void Model::Draw(XMMATRIX& world, XMMATRIX& view, XMMATRIX& projection, XMFLOAT4
 
 void Model::DepthPass(XMMATRIX& world, XMMATRIX& view, XMMATRIX& projection)
 {
+	XMFLOAT3 pos = this->GetPosition3f();
 	MODEL_CB CB;
+	world = XMMatrixRotationX(XMConvertToRadians(m_xA));
+	world *= XMMatrixRotationY(XMConvertToRadians(m_yA));
+	world *= XMMatrixRotationZ(XMConvertToRadians(m_zA));
+	world *= XMMatrixScaling(m_scale, m_scale, m_scale);
+	world *= XMMatrixTranslation(pos.x, pos.y, pos.z);
 	CB.WVP = world * view * projection;
 	CB.World = world;
 	m_pContext->UpdateSubresource(m_pModelCB.Get(), 0, nullptr, &CB, 0, 0);
@@ -354,6 +360,11 @@ void Model::SetZA(float a)
 void Model::SetPosition(float x, float y, float z)
 {
 	m_Position = XMVectorSet(x, y, z, 0);
+}
+
+void Model::SetPosition(DirectX::XMVECTOR newPos)
+{
+	m_Position = newPos;
 }
 
 DirectX::XMVECTOR Model::GetPosition()

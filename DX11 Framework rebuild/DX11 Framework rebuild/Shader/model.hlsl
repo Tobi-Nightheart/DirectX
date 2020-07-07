@@ -74,7 +74,7 @@ vOut VShader(vIn input)
     
     output.position = mul(mWVP, float4(input.position, 1.0f));
     output.texcoord = input.texcoord;
-    output.normal = (float3) mul(mWorld, float4(input.normal, 1.0f));
+    output.normal = mul((float3x3) mWorld, input.normal);
 
     return output;
 }

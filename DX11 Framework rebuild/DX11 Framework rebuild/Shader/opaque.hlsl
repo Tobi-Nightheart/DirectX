@@ -1,3 +1,4 @@
+//This is a shader that works both for shadow maps and for HeightMap generation
 cbuffer OpaqueCB : register(b0)
 {
     float4x4 WVP : packoffset(c0);

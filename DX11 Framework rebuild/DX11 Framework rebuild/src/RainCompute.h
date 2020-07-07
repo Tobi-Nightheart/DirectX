@@ -7,13 +7,13 @@ class RainCompute
 {
 private:
 	//Device and Context
-	Microsoft::WRL::ComPtr<ID3D11Device> r_pDevice;
-	Microsoft::WRL::ComPtr<ID3D11DeviceContext> r_pContext;
+	Microsoft::WRL::ComPtr<ID3D11Device> MyDevice;
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext> MyContext;
 
 	//Constant buffers
-	Microsoft::WRL::ComPtr<ID3D11Buffer> r_pDepthCB;
-	Microsoft::WRL::ComPtr<ID3D11Buffer> r_pSimulateCB;
-	Microsoft::WRL::ComPtr<ID3D11Buffer> r_pRendererCB;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> MyDepthCB;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> MySimulateCB;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> MyRendererCB;
 
 	struct DepthCB //64 bytes
 	{
@@ -46,8 +46,8 @@ private:
 	//RendererCB cb_draw_value;
 
 	//utilities
-	std::shared_ptr<Camera> r_pCamera;
-	std::shared_ptr<GameTimer> r_pGameTimer;
+	std::shared_ptr<Camera> MyCamera;
+	std::shared_ptr<GameTimer> MyGameTimer;
 	
 	struct BoundBox //CHANGE
 	{
@@ -65,59 +65,59 @@ private:
 	const int DimSize = 32 * 4;
 
 	//VertexBuffer
-	Microsoft::WRL::ComPtr<ID3D11Buffer> r_pSimBuffer;
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> r_pSimBufferView;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> MySimBuffer;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> MySimBufferView;
 
 	//Depth texture
-	Microsoft::WRL::ComPtr<ID3D11Texture2D> r_pDepth;
-	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> r_pHeightMapDSV;
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> r_pHeightMapSRV;
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> MyDepth;
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> MyHeightMapDSV;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> MyHeightMapSRV;
 
 	//noise and streak texture
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> r_pNoiseSRV;
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> r_pStreakSRV;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> MyNoiseSRV;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> MyStreakSRV;
 
 	//UAV
-	Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> r_pUAV;
+	Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> MyUAV;
 
 	//blendStates
-	Microsoft::WRL::ComPtr<ID3D11BlendState> r_pBlendRender;
-	Microsoft::WRL::ComPtr<ID3D11BlendState> r_pBlendDefault;
+	Microsoft::WRL::ComPtr<ID3D11BlendState> MyBlendRender;
+	Microsoft::WRL::ComPtr<ID3D11BlendState> MyBlendDefault;
 
 	//Shader objects
-	Microsoft::WRL::ComPtr<ID3D11VertexShader> r_pVS_Height;
-	Microsoft::WRL::ComPtr<ID3D11VertexShader> r_pVS_Out;
-	Microsoft::WRL::ComPtr<ID3D11PixelShader> r_pPS;
-	Microsoft::WRL::ComPtr<ID3D11ComputeShader> r_pCS;
+	Microsoft::WRL::ComPtr<ID3D11VertexShader> MyVS_Height;
+	Microsoft::WRL::ComPtr<ID3D11VertexShader> MyVS_Out;
+	Microsoft::WRL::ComPtr<ID3D11PixelShader> MyPS;
+	Microsoft::WRL::ComPtr<ID3D11ComputeShader> MyCS;
 
 	//sample state
-	Microsoft::WRL::ComPtr<ID3D11SamplerState> r_pSampler0;
+	Microsoft::WRL::ComPtr<ID3D11SamplerState> MySampler0;
 
 	//rasterizer state
-	Microsoft::WRL::ComPtr<ID3D11RasterizerState> r_pRasterState;
+	Microsoft::WRL::ComPtr<ID3D11RasterizerState> MyRasterState;
 
 	//InputLayout
-	Microsoft::WRL::ComPtr<ID3D11InputLayout> r_pInputLayout;
-	Microsoft::WRL::ComPtr<ID3D11InputLayout> r_pDepthIA;
+	Microsoft::WRL::ComPtr<ID3D11InputLayout> MyInputLayout;
+	Microsoft::WRL::ComPtr<ID3D11InputLayout> MyDepthIA;
 
 	//Init float data
-	float* initFLOAT;
+	float* MyInitFLOAT;
 
 	//floats
-	float r_fMaxWindVariance;
-	float r_fVertSpeed;
-	float r_fStreakScale;
-	float r_fDensity;
+	float MyMaxWindVariance;
+	float MyVertSpeed;
+	float MyStreakScale;
+	float MyDensity;
 
 	//vector
-	DirectX::XMVECTOR r_vBoundCenter;
-	DirectX::XMVECTOR r_vBoundHalfSize;
-	DirectX::XMVECTOR r_vCurWindEffect;
+	DirectX::XMVECTOR MyBoundCenter;
+	DirectX::XMVECTOR MyBoundHalfSize;
+	DirectX::XMVECTOR MyCurWindEffect;
 
 	//Matrices
-	DirectX::XMMATRIX r_mRainViewProj;
-	DirectX::XMMATRIX r_mRainView;
-	DirectX::XMMATRIX r_mRainProj;
+	DirectX::XMMATRIX MyRainViewProj;
+	DirectX::XMMATRIX MyRainView;
+	DirectX::XMMATRIX MyRainProj;
 
 public:
 	RainCompute(ID3D11Device* device, ID3D11DeviceContext* context, std::shared_ptr<Camera> camera, std::shared_ptr<GameTimer> gt);
@@ -133,7 +133,7 @@ public:
 	DirectX::XMMATRIX GetProj();
 	~RainCompute();
 
-	void SetDensity(float d) { r_fDensity = d; }
+	void SetDensity(float d) { MyDensity = d; }
 
 	RainCompute operator= (RainCompute rhs) = delete;
 };

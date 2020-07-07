@@ -2,6 +2,7 @@
 #include "Camera.h"
 #include "Model.h"
 #include "GameTimer.h"
+#include <memory>
 
 class SceneManager
 {
@@ -20,8 +21,7 @@ private:
 
 	//camera
 	Camera sc_Camera;
-
-	std::shared_ptr<GameTimer> sc_pGT;
+	GameTimer* sc_pGT;
 
 public:
 	SceneManager(ID3D11Device* device, ID3D11DeviceContext* context, GameTimer* gt);
